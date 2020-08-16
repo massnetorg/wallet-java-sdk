@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 public class ApiModels {
 
-    private static Gson gson = new Gson();
+    private static Gson gson = ModelSerializer.getGSON();
 
     @Test
     public void testApiModelsWithJava() throws Exception {
