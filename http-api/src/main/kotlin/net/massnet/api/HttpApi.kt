@@ -106,6 +106,9 @@ interface MassNetApiV1 {
 
     @POST("transactions/binding")
     fun createBindingTransaction(@Body req: CreateBindingTransactionRequest): Single<HexData>
+
+    @POST("addresses/sk")
+    fun getSk(@Body req: GetSkRequest): Single<Sk> // dangerous, for SDK only
 }
 
 object MassNetApiV1Impl {

@@ -424,3 +424,12 @@ data class CreateBindingTransactionRequest(
         var amount: String
     )
 }
+
+data class GetSkRequest(
+    var address: String,
+    var passphrase: String
+)
+
+data class Sk(
+    val sk: String
+)
