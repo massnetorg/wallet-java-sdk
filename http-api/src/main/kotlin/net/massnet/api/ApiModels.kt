@@ -6,11 +6,7 @@ import java.math.BigInteger
 
 object ModelSerializer {
     @JvmStatic
-    val GSON by lazy {
-        GsonBuilder()
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .create()
-    }
+    val GSON = GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
 }
 
 data class BestBlock(

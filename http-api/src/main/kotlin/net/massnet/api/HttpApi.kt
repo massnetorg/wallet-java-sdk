@@ -121,4 +121,7 @@ object MassNetApiV1Impl {
             .addConverterFactory(GsonConverterFactory.create(ModelSerializer.GSON))
             .build().create(MassNetApiV1::class.java)
     }
+
+    @JvmStatic
+    val defaultService = create(DEFAULT_ENDPOINT)
 }
