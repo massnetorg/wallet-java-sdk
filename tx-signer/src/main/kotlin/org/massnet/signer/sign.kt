@@ -8,11 +8,11 @@ import org.massnet.signer.ByteUtils.hexToBytes
 import org.massnet.signer.ByteUtils.toHexString
 import java.nio.ByteBuffer
 
-enum class HashType(val value: Int) {
+enum class HashType(val value: Byte) {
     SigHashAll(0x1),
     SigHashNone(0x2),
     SigHashSingle(0x3),
-    SigHashAnyOneCanPay(0x80),
+    SigHashAnyOneCanPay(0x80.toByte()),
 }
 
 object Signer {
@@ -28,12 +28,13 @@ object Signer {
         return Script(buf.array())
     }
 
-    private fun getSignatureScript(signature: ECKey.ECDSASignature): Script {
+    private fun getSignatureScript(signature: ECKey.ECDSASignature, type: HashType): Script {
         val encoded = signature.encodeToDER();
-        val size = 1 + encoded.size;
+        val size = encoded.size + 2
         val buf = ByteBuffer.allocate(size)
-        buf.put(encoded.size.toByte())
+        buf.put((encoded.size + 1).toByte())
         buf.put(encoded)
+        buf.put(type.value) // BIP-0062: 0x30 [total-length] 0x02 [R-length] [R] 0x02 [S-length] [S] [sighash-type]
         return Script(buf.array())
     }
 
@@ -44,15 +45,20 @@ object Signer {
         // ensure input validity
         assert(tx.txInCount == amounts.size && tx.txInCount == keys.size)
         // make a copy
-        val signedTx = tx.toBuilder();
+        val signedTx = tx.toBuilder()
+        // signing hashes
+        val sigHashes = TxSigHashes.fromTransaction(tx)
+        println(sigHashes.prevOuts.toHexString())
+        println(sigHashes.sequences.toHexString())
+        println(sigHashes.outputs.toHexString())
         // sign each input
         for (i in 0 until tx.txInCount) {
             val txIn = tx.txInList[i]
             val key = keys[i]
             val redeemScript = getRedeemScript(key)
-            val hash = Hash.hashWitnessSignature(tx, i, amounts[i], redeemScript, type, TxSigHashes.fromTransaction(tx))
+            val hash = Hash.hashWitnessSignature(tx, i, amounts[i], redeemScript, type, sigHashes)
             val signature = key.sign(hash)
-            val signatureScript = getSignatureScript(signature)
+            val signatureScript = getSignatureScript(signature, type)
             val witnesses =
                 listOf(ByteString.copyFrom(signatureScript.program), ByteString.copyFrom(redeemScript.program))
             // replace txIn with witnesses set

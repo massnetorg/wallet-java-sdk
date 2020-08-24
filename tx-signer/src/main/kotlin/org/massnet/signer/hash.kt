@@ -3,26 +3,22 @@ package org.massnet.signer
 import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.script.Script
 import org.massnet.signer.ByteUtils.toHexString
-import java.io.ByteArrayOutputStream
-import java.io.DataOutputStream
 import java.nio.ByteBuffer
+import java.nio.ByteOrder
 
 object Hash {
     fun hashPrevOutputs(tx: Proto.Tx): ByteArray {
-        val buf = ByteBuffer.allocate((256 + 4) * tx.txInList.size)
+        val buf = ByteBuffer.allocate((32 + 4) * tx.txInCount).order(ByteOrder.LITTLE_ENDIAN)
         for (txIn in tx.txInList) {
             val prevOut = txIn.previousOutPoint
-            buf.putLong(prevOut.hash.s0)
-            buf.putLong(prevOut.hash.s1)
-            buf.putLong(prevOut.hash.s2)
-            buf.putLong(prevOut.hash.s3)
+            buf.put(prevOut.hash.toBytes())
             buf.putInt(prevOut.index)
         }
         return Sha256Hash.hashTwice(buf.array())
     }
 
     fun hashSequences(tx: Proto.Tx): ByteArray {
-        val buf = ByteBuffer.allocate((8) * tx.txInList.size)
+        val buf = ByteBuffer.allocate(8 * tx.txInCount).order(ByteOrder.LITTLE_ENDIAN)
         for (txIn in tx.txInList) {
             buf.putLong(txIn.sequence)
         }
@@ -31,7 +27,7 @@ object Hash {
 
     fun hashOutputs(tx: Proto.Tx): ByteArray {
         val size = tx.txOutList.map { 8 + it.pkScript.size() }.sum()
-        val buf = ByteBuffer.allocate(size)
+        val buf = ByteBuffer.allocate(size).order(ByteOrder.LITTLE_ENDIAN)
         for (txOut in tx.txOutList) {
             buf.putLong(txOut.value)
             buf.put(txOut.pkScript.toByteArray())
@@ -39,8 +35,8 @@ object Hash {
         return Sha256Hash.hashTwice(buf.array())
     }
 
-    fun Proto.Hash.toBytes(): ByteArray {
-        val arr = ByteBuffer.allocate(64)
+    private fun Proto.Hash.toBytes(): ByteArray {
+        val arr = ByteBuffer.allocate(32).order(ByteOrder.BIG_ENDIAN)
         arr.putLong(this.s0)
         arr.putLong(this.s1)
         arr.putLong(this.s2)
@@ -61,45 +57,46 @@ object Hash {
         // we only support this now
         assert(hashType == HashType.SigHashAll)
 
-        val bout = ByteArrayOutputStream()
-        val out = DataOutputStream(bout)
+        val buf = ByteBuffer.allocate(1.shl(20)).order(ByteOrder.LITTLE_ENDIAN)
 
         // version
-        out.writeInt(sigHashes.version)
+        buf.putInt(sigHashes.version)
 
         // not anyone can pay
-        out.write(sigHashes.prevOuts)
+        buf.put(sigHashes.prevOuts)
 
         // sighash all
-        out.write(sigHashes.sequences)
+        buf.put(sigHashes.sequences)
 
         // put input
         val txIn = tx.txInList[index]
 
         // write outpoint
-        out.write(txIn.previousOutPoint.hash.toBytes())
-        out.write(txIn.previousOutPoint.index)
+        buf.put(txIn.previousOutPoint.hash.toBytes())
+        buf.putInt(txIn.previousOutPoint.index)
 
         // write script
-        out.write(script.program)
+        buf.put(script.program)
 
         // write amount, sequence
-        out.writeLong(value)
-        out.writeLong(txIn.sequence)
+        buf.putLong(value)
+        buf.putLong(txIn.sequence)
 
         // write payload
-        out.write(tx.payload.toByteArray())
+        buf.put(tx.payload.toByteArray())
 
         // write outputs
-        out.write(sigHashes.outputs)
+        buf.put(sigHashes.outputs)
 
         // write locktime & type
-        out.writeLong(sigHashes.lockTime)
+        buf.putLong(sigHashes.lockTime)
 
         // write hash type
-        out.write(hashType.value)
+        buf.putInt(hashType.value.toInt())
+        val length = buf.position()
+        val raw = ByteArray(length)
 
-        val raw = bout.toByteArray()
+        System.arraycopy(buf.array(), 0, raw, 0, length)
         println("Raw data to sign: ${raw.toHexString()}")
         return Sha256Hash.twiceOf(raw)
     }
