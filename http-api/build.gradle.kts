@@ -17,11 +17,6 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:${retrofitVersion}")
 }
 
-java {
-    withJavadocJar()
-    withSourcesJar()
-}
-
 publishing {
     publications {
         create<MavenPublication>("httpApi") {
@@ -32,7 +27,7 @@ publishing {
 
             pom {
                 name.set(project.name)
-                description.set("MassNet Wallket SDK, wrapping the HTTP API of a MassNet wallet full node")
+                description.set("MassNet Wallet SDK (full node wallet HTTP API wrapper)")
                 url.set(Constants.pomUrl)
                 licenses {
                     license {
@@ -51,19 +46,6 @@ publishing {
                     connection.set(Constants.pomScmConnection)
                     url.set(Constants.pomScmUrl)
                 }
-            }
-        }
-    }
-    repositories {
-        maven {
-            val snapshotUrl = uri("https://oss.sonatype.org/content/repositories/snapshots")
-            val releaseUrl = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
-            url = if (version.toString().endsWith("SNAPSHOT")) snapshotUrl else releaseUrl
-            credentials {
-                val mavenUsername: String by project
-                val mavenPassword: String by project
-                username = mavenUsername
-                password = mavenPassword
             }
         }
     }

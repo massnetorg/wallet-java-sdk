@@ -2,7 +2,7 @@
 
 ## Requirements
 
-At least Java 8 is required. Kotlin is recommended.
+At least Java 8 is required. Java 10+ or Kotlin is recommended for simplicity.
 
 ## HTTP API
 

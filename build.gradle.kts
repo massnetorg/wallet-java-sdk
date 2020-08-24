@@ -3,6 +3,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
     kotlin("jvm") version "1.3.72"
+    `maven-publish`
 }
 
 allprojects {
@@ -15,6 +16,7 @@ allprojects {
 subprojects {
 
     apply(plugin = "org.jetbrains.kotlin.jvm")
+    apply(plugin = "org.gradle.maven-publish")
 
     dependencies {
         val junitVersion = "5.6.2"
@@ -39,10 +41,25 @@ subprojects {
             }
         }
     }
-}
 
-buildscript {
-    extra.apply {
+    java {
+        withJavadocJar()
+        withSourcesJar()
+    }
 
+    publishing {
+        repositories {
+            maven {
+                val snapshotUrl = uri("https://oss.sonatype.org/content/repositories/snapshots")
+                val releaseUrl = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+                url = if (version.toString().endsWith("SNAPSHOT")) snapshotUrl else releaseUrl
+                credentials {
+                    val mavenUsername: String by project
+                    val mavenPassword: String by project
+                    username = mavenUsername
+                    password = mavenPassword
+                }
+            }
+        }
     }
 }
