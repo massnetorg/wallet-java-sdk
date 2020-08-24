@@ -29,11 +29,13 @@ data class ClientStatus(
         val outbound: Int,
         val inbound: Int
     )
+
     data class PeerInfo(
         val id: String,
         val address: String,
         val direction: String
     )
+
     data class PeerList(
         val outbound: List<PeerInfo>,
         val inbound: List<PeerInfo>,
@@ -220,6 +222,7 @@ data class DecodedTransaction(
         val sequence: BigInteger,
         val witness: List<String>
     )
+
     data class Vout(
         val value: String,
         val n: Int,
@@ -288,6 +291,7 @@ data class RawTransaction(
         val blockHash: String,
         val timestamp: Int
     )
+
     data class Vin(
         val value: String,
         val n: Int,
@@ -302,6 +306,7 @@ data class RawTransaction(
             val addresses: List<String>
         )
     }
+
     data class Vout(
         val value: String,
         val n: Int,
@@ -382,6 +387,7 @@ data class TransactionHistory(
             val txId: String,
             val index: Int
         )
+
         data class Output(
             val address: String,
             val amount: String

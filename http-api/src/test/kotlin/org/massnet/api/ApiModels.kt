@@ -6,13 +6,16 @@ import org.junit.jupiter.api.Test
 object ApiModelsTest {
     private val gson = ModelSerializer.GSON
     private val rawResults: List<Pair<String, String>> = listOf(
-        Pair("""
+        Pair(
+            """
             {
                 "height": "176989",
                 "target": "b173f7b71"
             }
-        """.trimIndent(), BestBlock::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), BestBlock::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "peer_listening": true,
                 "syncing": false,
@@ -42,8 +45,10 @@ object ApiModelsTest {
                     "other": []
                 }
             }
-        """.trimIndent(), ClientStatus::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), ClientStatus::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "wallets": [
                     {
@@ -62,27 +67,35 @@ object ApiModelsTest {
                     }
                 ]
             }
-        """.trimIndent(), Wallets::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), Wallets::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "passphrase":"123456",
                 "remarks":"init-2",
                 "bit_size":192
             }
-        """.trimIndent(), CreateWalletRequest::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), CreateWalletRequest::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "wallet_id": "ac10nge8pha03mdp32ndhtxr7lmscc4s0lkg9eee2j",
                 "mnemonic": "tribe belt hand odor beauty pelican switch pluck toe pigeon zero future acoustic enemy panda twice endless motion",
                 "version": 1
             }
-        """.trimIndent(), CreateWalletResponse::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), CreateWalletResponse::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "wallet_id":"ac10jv5xfkywm9fu2elcjyqyq4gyz6yu6jzm7fq8fz"
             }
-        """.trimIndent(), UseWalletRequest::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), UseWalletRequest::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "chain_id": "e931abb77f2568f752a29ed28d442558764a5961ed773df7188430a0e0f7cf18",
                 "wallet_id": "ac10jv5xfkywm9fu2elcjyqyq4gyz6yu6jzm7fq8fz",
@@ -92,14 +105,18 @@ object ApiModelsTest {
                 "internal_key_count": 0,
                 "remarks": "init"
             }
-        """.trimIndent(), UseWalletResponse::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), UseWalletResponse::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
             	"keystore": "{\"remarks\":\"init\",\"crypto\":{\"cipher\":\"Stream cipher\",\"entropyEnc\":\"408998f673619fafe25a820588f12c0b9fed25a0ec2fad33128abc62644cd9d80c5e9f2f1f23df1862058ff7622bb097185c45f6b59697ec\",\"kdf\":\"scrypt\",\"privParams\":\"9d5d2f6de075ed1f8c46d590a823c67bcbdb25159ba3caf50426c27b575821a95daa891a93be42c900f40c1c6f1ae72c19cf3ffbefe45bb3b67643988a517cb2000004000000000008000000000000000100000000000000\",\"cryptoKeyEntropyEnc\":\"8b5d8cf78697d88c7a9e3143862c8db45b7a9729e5976df99ef586c7ebfd3b35a3ab2d82b606eaa9ca1f7c7b0bf21a585e87aec423e48c1e4d0d45745b5a7d4ae5c1c688c2cd9ca1\"},\"hdPath\":{\"Purpose\":44,\"Coin\":297,\"Account\":1,\"ExternalChildNum\":5,\"InternalChildNum\":0}}",
             	"passphrase": "111111"
             }
-        """.trimIndent(), ImportWalletRequest::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), ImportWalletRequest::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "ok": true,
                 "wallet_id": "ac10jv5xfkywm9fu2elcjyqyq4gyz6yu6jzm7fq8fz",
@@ -107,42 +124,56 @@ object ApiModelsTest {
                 "version": 0,
                 "remarks": "init"
             }
-        """.trimIndent(), ImportWalletResponse::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), ImportWalletResponse::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
             	"mnemonic":"tribe belt hand odor beauty pelican switch pluck toe pigeon zero future acoustic enemy panda twice endless motion",
             	"passphrase":"123456",
                 "remarks":"e.g."
             }
-        """.trimIndent(), ImportMnemonicRequest::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), ImportMnemonicRequest::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
             	"wallet_id":"ac10nge8pha03mdp32ndhtxr7lmscc4s0lkg9eee2j",
             	"passphrase":"123456"
             }
-        """.trimIndent(), WalletRequest::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), WalletRequest::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "keystore": "{\"remarks\":\"init-2\",\"crypto\":{\"cipher\":\"Stream cipher\",\"entropyEnc\":\"8e5d6c3fba1bd23a75fd545287f41828a0f7d1c75c8e3166cbc266d0ffb95997764ecc631b995c3b4696aaf7c58c6e887fc0b89ebf4ccfd0f3f82d4c33913650\",\"kdf\":\"scrypt\",\"privParams\":\"551147d50b72305cf0769f3f524e67a9ebda3fb256aaedb53c43dc5b24e99c2bb2c39425fa4fe08afafda88eb2a096e3395c499bae8aafe4bc6436ee70c0a150000004000000000008000000000000000100000000000000\",\"cryptoKeyEntropyEnc\":\"61089855ec95a5f0214506aefcd2f633ef330a774698d1e8a465dc86f68146c13dd95eb562012a8601aed6f8c3803d4283bd8b8ecd2613629a272c5911a5449aa002254c147ff3c2\"},\"hdPath\":{\"Purpose\":44,\"Coin\":297,\"Account\":1,\"ExternalChildNum\":0,\"InternalChildNum\":0}}"
             }
-        """.trimIndent(), ExportWalletResponse::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), ExportWalletResponse::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "ok": true
             }
-        """.trimIndent(), RemoveWalletResponse::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), RemoveWalletResponse::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "mnemonic": "tribe belt hand odor beauty pelican switch pluck toe pigeon zero future acoustic enemy panda twice endless motion"
             }
-        """.trimIndent(), WalletMnemonic::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), WalletMnemonic::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "required_confirmations":1,
                 "detail":true
             }
-        """.trimIndent(), GetWalletBalanceRequest::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), GetWalletBalanceRequest::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "wallet_id": "ac10jv5xfkywm9fu2elcjyqyq4gyz6yu6jzm7fq8fz",
                 "total": "48994.88593426",
@@ -152,18 +183,24 @@ object ApiModelsTest {
                     "withdrawable_binding": "0.106496"
                 }
             }
-        """.trimIndent(), WalletBalance::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), WalletBalance::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "version":0
             }
-        """.trimIndent(), CreateAddressRequest::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), CreateAddressRequest::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "address": "ms1qqc7773md3ux8wkha6td2q9vcxfae39xvuzgj063q4l2mwymp2h0aqunux9z"
             }
-        """.trimIndent(), CreateAddressResponse::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), CreateAddressResponse::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "details": [
                     {
@@ -174,14 +211,18 @@ object ApiModelsTest {
                     }
                 ]
             }
-        """.trimIndent(), AddressDetails::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), AddressDetails::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "required_confirmations":1,
                 "addresses":[ "ms1qqehh47s0hvzrqqjl77ayj78yytstjkrsltcna343p8yg7ndskvveql4z3vl"]
             }
-        """.trimIndent(), GetAddressBalanceRequest::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), GetAddressBalanceRequest::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "balances": [
                     {
@@ -193,21 +234,27 @@ object ApiModelsTest {
                     }
                 ]
             }
-        """.trimIndent(), AddressBalances::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), AddressBalances::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "is_valid": true,
                 "is_mine": true,
                 "address": "ms1qqc7773md3ux8wkha6td2q9vcxfae39xvuzgj063q4l2mwymp2h0aqunux9z",
                 "version": 0
             }
-        """.trimIndent(), ValidateAddressResponse::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), ValidateAddressResponse::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "addresses":["ms1qqehh47s0hvzrqqjl77ayj78yytstjkrsltcna343p8yg7ndskvveql4z3vl"]
             }
-        """.trimIndent(), AddressesRequest::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), AddressesRequest::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "address_utxos": [
                     {
@@ -235,13 +282,17 @@ object ApiModelsTest {
                     }
                 ]
             }
-        """.trimIndent(), AddressUtxos::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), AddressUtxos::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "hex":"080112a4010a280a24093e146ba1a03af113ac38692ba28363419125549bcf62b757021c03b039fd3d0db1001124847304402200c32d95597e7f9df8463d4260fdba320dd3f972182jd8wckc766b71b27fc02206da7e97a66ba1a0f36960fe86a38e19ffad809065b23a141c91affb20ef45dd801122551210356830b4780dc5f5463aa91eeaa6508f93698e039fce8cf17db363ba99afd790451ae19ffffffffffffffff1a2908909fd32f1222002076c83de3af1270125e4cf2db9b2b6c80d63d1043d9d0a57875193ad9d55783ef1a2708904e122200203498e06bb5508a12320488872db0f3ed19f8903a6a16b6f9b1a2708cc7b1222002041c47db9db9b076bd6c29e1461b46c7d26b44b08abc38f297d8b47db9dbec0c38"
             }
-        """.trimIndent(), HexData::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), HexData::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "tx_id": "e5b35b35510149ee98c4865285141cb0149ee98c4563825fdfedf1757d9853ee",
                 "version": 1,
@@ -272,8 +323,10 @@ object ApiModelsTest {
                 ],
                 "payload": ""
             }
-        """.trimIndent(), DecodedTransaction::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), DecodedTransaction::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "inputs":[
                     {
@@ -288,38 +341,50 @@ object ApiModelsTest {
                     "ms1qqc7773md3ux8wkha6td2q9vcxfae39xvuzgj063q4l2mwymp2h0aqunux9z":"200.00000001"
                 }
             }
-        """.trimIndent(), CreateRawTransactionRequest::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), CreateRawTransactionRequest::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "amounts":{
                     "ms1qqc7773md3ux8wkha6td2q9vcxfae39xvuzgj063q4l2mwymp2h0aqunux9z":"100.00000001"
                 },
                 "fee": "0.0001"
             }
-        """.trimIndent(), AutoCreateTransactionRequest::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), AutoCreateTransactionRequest::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "raw_tx":"080112330a280a240912dd62721ede54001140c92cfc8382df3819ee036bfb2b5038a021d2636f81821b767a100919ffffffffffffffff12330a280a2409c4352cf60f2ed5001100fd6132166eb6c719ff7553b515588c2721b12de84e4e2b5575100919ffffffffffffffff1a2a088190dfc04a12220020c7bde8edb1e18eeb5fba5b5402b3064f7312999c1224fd4415fab6e26c2abbfa",
                 "passphrase": "111111"
             }
-        """.trimIndent(), SignRawTransactionRequest::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), SignRawTransactionRequest::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "hex": "080112a4010a280a240912dd62721ede54001140c92cfc8382df3819ee036bfb2b5038a021d2636f81821b767a10091248473044022003161aa740d89984ef995103735bc6f6a0e0db76bb4eb224914bb797cf9df9ab02202765b0dd7ecb4bf5835e1a1bdce6686b26b3f6e37977668aaefdfa9a29e0a5f4011225512103d0cd7443a5e8dcc030793bea363fe328c84d2daf75f0f2db17d36c07642777b151ae19ffffffffffffffff12a4010a280a2409c4352cf60f2ed5001100fd6132166eb6c719ff7553b515588c2721b12de84e4e2b55751009124847304402205f3a8d2ea86971a7cebba0a07aeb93372732bcefc4e566e8d29009a8cc5598720220759fd2b87292cc9633f16e151d6d34e28dfbfde6b35fa329177b985f80388c14011225512103d0cd7443a5e8dcc030793bea363fe328c84d2daf75f0f2db17d36c07642777b151ae19ffffffffffffffff1a2a088190dfc04a12220020c7bde8edb1e18eeb5fba5b5402b3064f7312999c1224fd4415fab6e26c2abbfa",
                 "complete": true
             }
-        """.trimIndent(), SignRawTransactionResponse::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), SignRawTransactionResponse::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "fee": "0.0001"
             }
-        """.trimIndent(), TransactionFee::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), TransactionFee::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                "tx_id": "b7f7cab1dcb748987aa5694a6c021828cbf18f07154991467417dbe4f98e9707"
             }
-        """.trimIndent(), TransactionId::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), TransactionId::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "hex": "080112a4010a280a240912dd62721ede54001140c92cfc8382df3819ee036bfb2b5038a021d2636f81821b767a10091248473044022003161aa740d89984ef995103735bc6f6a0e0db76bb4eb224914bb797cf9df9ab02202765b0dd7ecb4bf5835e1a1bdce6686b26b3f6e37977668aaefdfa9a29e0a5f4011225512103d0cd7443a5e8dcc030793bea363fe328c84d2daf75f0f2db17d36c07642777b151ae19ffffffffffffffff12a4010a280a2409c4352cf60f2ed5001100fd6132166eb6c719ff7553b515588c2721b12de84e4e2b55751009124847304402205f3a8d2ea86971a7cebba0a07aeb93372732bcefc4e566e8d29009a8cc5598720220759fd2b87292cc9633f16e151d6d34e28dfbfde6b35fa329177b985f80388c14011225512103d0cd7443a5e8dcc030793bea363fe328c84d2daf75f0f2db17d36c07642777b151ae19ffffffffffffffff1a2a088190dfc04a12220020c7bde8edb1e18eeb5fba5b5402b3064f7312999c1224fd4415fab6e26c2abbfa",
                 "tx_id": "b7f7cab1dcb748987aa5694a6c021828cbf18f07154991467417dbe4f98e9707",
@@ -388,22 +453,28 @@ object ApiModelsTest {
                 "status": 1,
                 "coinbase": false
             }
-        """.trimIndent(), RawTransaction::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), RawTransaction::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "code": 1,
                 "status": "confirmed"
             }
-        """.trimIndent(), TransactionStatus::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), TransactionStatus::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "from_address":"ms1qqgzwwzt77zuw4sf8uqugqj5w6cpk6lalas4svx6jac20kjrhywx3qnshys8",
                 "staking_address":"ms1qp3fjnfxx3v2pja3gkatyrc3nzvfw52p08w4xnnuap47ey4wfg7xtq5yrwrx",
                 "amount": "3000",
                 "frozen_period": 65000
             }
-        """.trimIndent(), CreateStakingTransactionRequest::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), CreateStakingTransactionRequest::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "txs": [
                     {
@@ -421,8 +492,10 @@ object ApiModelsTest {
                 ],
                 "weights": {}
             }
-        """.trimIndent(), StakingHistory::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), StakingHistory::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "details": [
                     {
@@ -441,8 +514,10 @@ object ApiModelsTest {
                     }
                 ]
             }
-        """.trimIndent(), BlockStakingReward::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), BlockStakingReward::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "histories": [
                     {
@@ -470,16 +545,20 @@ object ApiModelsTest {
                     }
                 ]
             }
-        """.trimIndent(), TransactionHistory::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), TransactionHistory::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "amounts": {
                     "146hGPwfYRDde6tJ6trbyhkSoPwt69AqyZ": "0.026624",
                     "1EgzSkV7vJ7xhC5g38ULLPoMBhHVW38VZN": "0.026624"
                 }
             }
-        """.trimIndent(), AddressBinding::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), AddressBinding::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "histories": [
                     {
@@ -544,8 +623,10 @@ object ApiModelsTest {
                     }
                 ]
             }
-        """.trimIndent(), BindingHistory::class.qualifiedName!!),
-        Pair("""
+        """.trimIndent(), BindingHistory::class.qualifiedName!!
+        ),
+        Pair(
+            """
             {
                 "outputs":[{
                     "holder_address":"ms1qq2hr9cfgrrjekah9uy2nwsgpv5dtmckzh3vls6zgcv572k5hm5u8sd9nzjv",
@@ -555,7 +636,8 @@ object ApiModelsTest {
                 "from_address":"ms1qqgzwwzt77zuw4sf8uqugqj5w6cpk6lalas4svx6jac20kjrhywx3qnshys8",
                 "fee": "0.001"
             }
-            """.trimIndent(), CreateBindingTransactionRequest::class.qualifiedName!!)
+            """.trimIndent(), CreateBindingTransactionRequest::class.qualifiedName!!
+        )
     )
 
     @Test

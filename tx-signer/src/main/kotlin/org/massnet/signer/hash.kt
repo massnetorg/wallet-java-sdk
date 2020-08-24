@@ -48,7 +48,14 @@ object Hash {
         return arr.array()
     }
 
-    fun hashWitnessSignature(tx: Proto.Tx, index: Int, value: Long, script: Script, hashType: HashType, sigHashes: TxSigHashes): Sha256Hash {
+    fun hashWitnessSignature(
+        tx: Proto.Tx,
+        index: Int,
+        value: Long,
+        script: Script,
+        hashType: HashType,
+        sigHashes: TxSigHashes
+    ): Sha256Hash {
 
         assert(index < tx.txInList.size && index >= 0)
         // we only support this now

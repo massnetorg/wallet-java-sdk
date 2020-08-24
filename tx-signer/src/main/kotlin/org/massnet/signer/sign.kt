@@ -53,7 +53,8 @@ object Signer {
             val hash = Hash.hashWitnessSignature(tx, i, amounts[i], redeemScript, type, TxSigHashes.fromTransaction(tx))
             val signature = key.sign(hash)
             val signatureScript = getSignatureScript(signature)
-            val witnesses = listOf(ByteString.copyFrom(signatureScript.program), ByteString.copyFrom(redeemScript.program))
+            val witnesses =
+                listOf(ByteString.copyFrom(signatureScript.program), ByteString.copyFrom(redeemScript.program))
             // replace txIn with witnesses set
             signedTx.setTxIn(i, txIn.toBuilder().addAllWitness(witnesses).build())
         }

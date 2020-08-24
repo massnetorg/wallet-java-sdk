@@ -41,7 +41,8 @@ object ProtoTest {
 
     @Test
     fun testSign() {
-        val unsigned = "080112310a260a240969c72a868f3e91fa119725ce1adda871a719ec72816e1f5456552115b8943e8a8cf42619ffffffffffffffff1a290880c2d72f12220020f574b7a463d02a1df76f204b1db346c280cc2bf5ab006d6dee6ae588c2a951ae1a2a0898efd7f0241222002052586f0c1017b3497a0745d6a5390cd26e34f3d3acb9f1a0d3da7c487e74e42b"
+        val unsigned =
+            "080112310a260a240969c72a868f3e91fa119725ce1adda871a719ec72816e1f5456552115b8943e8a8cf42619ffffffffffffffff1a290880c2d72f12220020f574b7a463d02a1df76f204b1db346c280cc2bf5ab006d6dee6ae588c2a951ae1a2a0898efd7f0241222002052586f0c1017b3497a0745d6a5390cd26e34f3d3acb9f1a0d3da7c487e74e42b"
         val priv = "649ce9ec4cf87af806ded9fb95a4eafe55c2e045ba7a16ca7d3ea20a63ac582e"
         val signed = Signer.signRawTransaction(unsigned, listOf(10000000000), listOf(priv), HashType.SigHashAll)
         println(signed)

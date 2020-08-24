@@ -16,9 +16,9 @@ public class HttpApi {
         var req = new CreateWalletRequest("12345678", "wallet_1", null);
         System.out.println(req);
         var resp = api.createWallet(req)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.computation())
-                .subscribe(System.out::println);
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.computation())
+            .subscribe(System.out::println);
         System.out.println(resp);
     }
 }
