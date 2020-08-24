@@ -9,6 +9,13 @@ object ModelSerializer {
     val GSON = GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
 }
 
+data class ApiError(
+    val error: String,
+    val message: String,
+    val code: Int,
+    val details: List<Any>
+)
+
 data class BestBlock(
     val height: Int,
     val target: String

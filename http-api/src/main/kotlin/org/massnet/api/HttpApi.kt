@@ -1,6 +1,9 @@
 package org.massnet.api
 
 import io.reactivex.rxjava3.core.*
+import okhttp3.OkHttpClient
+import okhttp3.Interceptor
+import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.*
 import retrofit2.http.*
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
@@ -111,9 +114,37 @@ interface MassNetApiV1 {
     fun getSk(@Body req: GetSkRequest): Single<Sk> // dangerous, for SDK only
 }
 
+class ApiException(
+    val error: ApiError
+): Exception("Wallet returns an error: $error")
+
 object MassNetApiV1Impl {
 
     const val DEFAULT_ENDPOINT = "http://127.0.0.1:9688/v1/"
+
+    private fun createOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(walletApiResponseInterceptor)
+            .build()
+    }
+
+    private val walletApiResponseInterceptor by lazy {
+        { chain: Interceptor.Chain ->
+            val request = chain.request()
+            val response = chain.proceed(request)
+            val body = response.body!!
+            val json = body.string()
+
+            if (response.code != 200) {
+                // try to parse as ApiError data type
+                val error = ModelSerializer.GSON.fromJson(json, ApiError::class.java)
+                throw ApiException(error)
+            } else {
+                response.newBuilder().body(json.toResponseBody(body.contentType())).build()
+            }
+        }
+    }
+
 
     @JvmOverloads
     @JvmStatic
@@ -122,6 +153,7 @@ object MassNetApiV1Impl {
             .baseUrl(baseUrl)
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(ModelSerializer.GSON))
+            .client(createOkHttpClient())
             .build().create(MassNetApiV1::class.java)
     }
 

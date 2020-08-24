@@ -15,10 +15,11 @@ public class HttpApi {
         // send a POST request & print results
         var req = new CreateWalletRequest("12345678", "wallet_1", null);
         System.out.println(req);
-        var resp = api.createWallet(req)
+        api.createWallet(req)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.computation())
-            .subscribe(System.out::println);
-        System.out.println(resp);
+            .doOnError(System.out::println)
+            .subscribe(System.out::println)
+            .dispose();
     }
 }

@@ -42,7 +42,8 @@ After cloning this repository, run:
 
 ### Usage
 
-First import `org.massnet.api`. All APIs support two invocation styles: RxJava and blocking.
+First import `org.massnet.api`.
+All APIs support two invocation styles: RxJava and blocking.
 
 ```java
 import org.massnet.api.*;
@@ -57,13 +58,21 @@ System.out.println(status);
 
 // example: create a wallet, using RxJava (optional parameters are nullable)
 var req = new CreateWalletRequest("12345678", "wallet_1", null);
-var resp = api.createWallet(req)
-        .subscribeOn(Schedulers.io())
-        .observeOn(Schedulers.computation())
-        .subscribe(System.out::println);
+api.createWallet(req)
+    .subscribeOn(Schedulers.io())
+    .observeOn(Schedulers.computation())
+    .doOnError(System.out::println) // exception handling
+    .subscribe(System.out::println)
+    .dispose();
 ```
 
-See `HttpApi.kt` for all services, and `ApiModels.kt` for all data models used in API.
+The default endpoint is `"http://127.0.0.1:9688/v1/"`.
+You should set `disable_tls` to `true` in `config.json` of MassNet wallet to disable HTTPS access.
+
+See `HttpApi.kt` for all APIs, and `ApiModels.kt` for all data models used in APIs.
+
+When the wallet returns an error, an `ApiException` will be thrown,
+and you can add a handler in `doOnError` to process.
 
 ## Transaction Signer
 
