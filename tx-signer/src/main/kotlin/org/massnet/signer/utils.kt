@@ -1,4 +1,4 @@
-package net.massnet.signer
+package org.massnet.signer
 
 object ByteUtils {
     private const val HEX_CHARS = "0123456789ABCDEF"

@@ -1,4 +1,4 @@
-package net.massnet.api;
+package org.massnet.api;
 
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import org.junit.jupiter.api.Test;

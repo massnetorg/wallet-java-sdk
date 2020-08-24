@@ -1,4 +1,4 @@
-package net.massnet.signer
+package org.massnet.signer
 
 import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.script.Script
@@ -7,7 +7,7 @@ import java.io.DataOutputStream
 import java.nio.ByteBuffer
 
 object Hash {
-    fun hashPrevOutputs(tx: Proto.Tx): ByteArray {
+    fun hashPrevOutputs(tx: net.massnet.signer.Proto.Tx): ByteArray {
         val buf = ByteBuffer.allocate((256 + 4) * tx.txInList.size)
         for (txIn in tx.txInList) {
             val prevOut = txIn.previousOutPoint
@@ -20,7 +20,7 @@ object Hash {
         return Sha256Hash.hashTwice(buf.array())
     }
 
-    fun hashSequences(tx: Proto.Tx): ByteArray {
+    fun hashSequences(tx: net.massnet.signer.Proto.Tx): ByteArray {
         val buf = ByteBuffer.allocate((8) * tx.txInList.size)
         for (txIn in tx.txInList) {
             buf.putLong(txIn.sequence)
@@ -28,7 +28,7 @@ object Hash {
         return Sha256Hash.hashTwice(buf.array())
     }
 
-    fun hashOutputs(tx: Proto.Tx): ByteArray {
+    fun hashOutputs(tx: net.massnet.signer.Proto.Tx): ByteArray {
         val size = tx.txOutList.map { tx -> 8 + tx.pkScript.size() }.sum()
         val buf = ByteBuffer.allocate(size)
         for (txOut in tx.txOutList) {
@@ -38,7 +38,7 @@ object Hash {
         return Sha256Hash.hashTwice(buf.array())
     }
 
-    fun Proto.Hash.toByteArray(): ByteArray {
+    fun net.massnet.signer.Proto.Hash.toByteArray(): ByteArray {
         val arr = ByteBuffer.allocate(256)
         arr.putLong(this.s0)
         arr.putLong(this.s1)
@@ -54,7 +54,7 @@ object Hash {
         SigHashAnyOneCanPay(0x80),
     }
 
-    fun hashWitnessSignature(tx: Proto.Tx, index: Int, value: Long, script: Script, hashType: HashType, sigHashes: TxSigHashes): ByteArray {
+    fun hashWitnessSignature(tx: net.massnet.signer.Proto.Tx, index: Int, value: Long, script: Script, hashType: HashType, sigHashes: TxSigHashes): ByteArray {
 
         assert(index < tx.txInList.size && index >= 0)
         // we only support this now
@@ -110,7 +110,7 @@ class TxSigHashes(
     var lockTime: Long
 ) {
     companion object {
-        fun fromTransaction(tx: Proto.Tx): TxSigHashes {
+        fun fromTransaction(tx: net.massnet.signer.Proto.Tx): TxSigHashes {
             return TxSigHashes(
                 Hash.hashPrevOutputs(tx),
                 Hash.hashSequences(tx),

@@ -6,9 +6,6 @@ plugins {
 }
 
 allprojects {
-    group = "org.massnet"
-    version = "1.0"
-
     repositories {
         mavenCentral()
         jcenter()
@@ -41,5 +38,11 @@ subprojects {
                 events = mutableSetOf(TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED)
             }
         }
+    }
+}
+
+buildscript {
+    extra.apply {
+
     }
 }

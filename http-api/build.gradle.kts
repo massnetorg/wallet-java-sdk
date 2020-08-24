@@ -1,5 +1,7 @@
 plugins {
     kotlin("jvm")
+    `maven-publish`
+    signing
 }
 
 dependencies {
@@ -13,4 +15,48 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:${retrofitVersion}")
     implementation("com.squareup.retrofit2:adapter-rxjava3:${retrofitVersion}")
     implementation("com.squareup.retrofit2:converter-gson:${retrofitVersion}")
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenCentral") {
+            groupId = Constants.artifactGroup
+            artifactId = project.name
+            version = "0.0.1"
+            from(components["java"])
+
+            pom {
+                name.set(project.name)
+                description.set("MassNet Wallket SDK, wrapping the HTTP API of a MassNet wallet full node")
+                url.set(Constants.pomUrl)
+                licenses {
+                    license {
+                        name.set(Constants.pomLicenseName)
+                        url.set(Constants.pomLicenseUrl)
+                        distribution.set(Constants.pomLicenseDist)
+                    }
+                }
+                developers {
+                    developer {
+                        id.set(Constants.pomDeveloperId)
+                        name.set(Constants.pomDeveloperName)
+                    }
+                }
+                scm {
+                    connection.set(Constants.pomScmConnection)
+                    url.set(Constants.pomScmUrl)
+                }
+            }
+        }
+    }
+}
+
+signing {
+    useGpgCmd()
+    sign(publishing.publications["mavenCentral"])
 }

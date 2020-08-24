@@ -6,7 +6,7 @@ At least Java 8 is required. Kotlin is recommended.
 
 ## HTTP API
 
-This package wraps around the HTTP API of a MassNet wallet full node.
+This package wraps the HTTP API of a MassNet wallet full node.
 
 ### Usage
 

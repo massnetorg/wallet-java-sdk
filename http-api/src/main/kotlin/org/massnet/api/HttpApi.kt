@@ -1,4 +1,4 @@
-package net.massnet.api
+package org.massnet.api
 
 import io.reactivex.rxjava3.core.*
 import retrofit2.*
@@ -126,5 +126,6 @@ object MassNetApiV1Impl {
     }
 
     @JvmStatic
-    val defaultService = create(DEFAULT_ENDPOINT)
+    val defaultService =
+        create(DEFAULT_ENDPOINT)
 }

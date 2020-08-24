@@ -1,6 +1,6 @@
 syntax = "proto3";
 package wirepb;
-option java_package = "net.massnet.signer";
+option java_package = "org.massnet.signer";
 option java_outer_classname = "Proto";
 
 // Proto for Blocks
