@@ -48,9 +48,6 @@ object Signer {
         val signedTx = tx.toBuilder()
         // signing hashes
         val sigHashes = TxSigHashes.fromTransaction(tx)
-        println(sigHashes.prevOuts.toHexString())
-        println(sigHashes.sequences.toHexString())
-        println(sigHashes.outputs.toHexString())
         // sign each input
         for (i in 0 until tx.txInCount) {
             val txIn = tx.txInList[i]

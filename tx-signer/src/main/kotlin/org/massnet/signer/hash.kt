@@ -97,7 +97,7 @@ object Hash {
         val raw = ByteArray(length)
 
         System.arraycopy(buf.array(), 0, raw, 0, length)
-        println("Raw data to sign: ${raw.toHexString()}")
+//        println("Raw data to sign: ${raw.toHexString()}")
         return Sha256Hash.twiceOf(raw)
     }
 }
