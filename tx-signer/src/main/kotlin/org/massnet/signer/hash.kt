@@ -7,7 +7,7 @@ import java.io.DataOutputStream
 import java.nio.ByteBuffer
 
 object Hash {
-    fun hashPrevOutputs(tx: net.massnet.signer.Proto.Tx): ByteArray {
+    fun hashPrevOutputs(tx: Proto.Tx): ByteArray {
         val buf = ByteBuffer.allocate((256 + 4) * tx.txInList.size)
         for (txIn in tx.txInList) {
             val prevOut = txIn.previousOutPoint
@@ -20,7 +20,7 @@ object Hash {
         return Sha256Hash.hashTwice(buf.array())
     }
 
-    fun hashSequences(tx: net.massnet.signer.Proto.Tx): ByteArray {
+    fun hashSequences(tx: Proto.Tx): ByteArray {
         val buf = ByteBuffer.allocate((8) * tx.txInList.size)
         for (txIn in tx.txInList) {
             buf.putLong(txIn.sequence)
@@ -28,8 +28,8 @@ object Hash {
         return Sha256Hash.hashTwice(buf.array())
     }
 
-    fun hashOutputs(tx: net.massnet.signer.Proto.Tx): ByteArray {
-        val size = tx.txOutList.map { tx -> 8 + tx.pkScript.size() }.sum()
+    fun hashOutputs(tx: Proto.Tx): ByteArray {
+        val size = tx.txOutList.map { 8 + it.pkScript.size() }.sum()
         val buf = ByteBuffer.allocate(size)
         for (txOut in tx.txOutList) {
             buf.putLong(txOut.value)
@@ -38,7 +38,7 @@ object Hash {
         return Sha256Hash.hashTwice(buf.array())
     }
 
-    fun net.massnet.signer.Proto.Hash.toByteArray(): ByteArray {
+    fun Proto.Hash.toBytes(): ByteArray {
         val arr = ByteBuffer.allocate(256)
         arr.putLong(this.s0)
         arr.putLong(this.s1)
@@ -54,7 +54,7 @@ object Hash {
         SigHashAnyOneCanPay(0x80),
     }
 
-    fun hashWitnessSignature(tx: net.massnet.signer.Proto.Tx, index: Int, value: Long, script: Script, hashType: HashType, sigHashes: TxSigHashes): ByteArray {
+    fun hashWitnessSignature(tx: Proto.Tx, index: Int, value: Long, script: Script, hashType: HashType, sigHashes: TxSigHashes): ByteArray {
 
         assert(index < tx.txInList.size && index >= 0)
         // we only support this now
@@ -76,7 +76,7 @@ object Hash {
         val txIn = tx.txInList[index]
 
         // write outpoint
-        out.write(txIn.previousOutPoint.hash.toByteArray())
+        out.write(txIn.previousOutPoint.hash.toBytes())
         out.write(txIn.previousOutPoint.index)
 
         // write script
@@ -110,7 +110,7 @@ class TxSigHashes(
     var lockTime: Long
 ) {
     companion object {
-        fun fromTransaction(tx: net.massnet.signer.Proto.Tx): TxSigHashes {
+        fun fromTransaction(tx: Proto.Tx): TxSigHashes {
             return TxSigHashes(
                 Hash.hashPrevOutputs(tx),
                 Hash.hashSequences(tx),

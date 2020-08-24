@@ -10,7 +10,7 @@ This package wraps the HTTP API of a MassNet wallet full node.
 
 ### Usage
 
-First import `net.massnet.api`. All APIs support two invocation styles: RxJava and blocking.
+First import `org.massnet.api`. All APIs support two invocation styles: RxJava and blocking.
 
 ```java
 // create API service (might be slow, about 0.5s)
