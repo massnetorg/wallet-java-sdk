@@ -2,6 +2,7 @@ package org.massnet.signer
 
 import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.script.Script
+import org.massnet.signer.ByteUtils.toHexString
 import java.io.ByteArrayOutputStream
 import java.io.DataOutputStream
 import java.nio.ByteBuffer
@@ -39,7 +40,7 @@ object Hash {
     }
 
     fun Proto.Hash.toBytes(): ByteArray {
-        val arr = ByteBuffer.allocate(256)
+        val arr = ByteBuffer.allocate(64)
         arr.putLong(this.s0)
         arr.putLong(this.s1)
         arr.putLong(this.s2)
@@ -91,7 +92,9 @@ object Hash {
         // write hash type
         out.write(hashType.value)
 
-        return Sha256Hash.twiceOf(bout.toByteArray())
+        val raw = bout.toByteArray()
+        println("Raw data to sign: ${raw.toHexString()}")
+        return Sha256Hash.twiceOf(raw)
     }
 }
 
