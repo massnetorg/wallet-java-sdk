@@ -47,14 +47,7 @@ object Hash {
         return arr.array()
     }
 
-    enum class HashType(val value: Int) {
-        SigHashAll(0x1),
-        SigHashNone(0x2),
-        SigHashSingle(0x3),
-        SigHashAnyOneCanPay(0x80),
-    }
-
-    fun hashWitnessSignature(tx: Proto.Tx, index: Int, value: Long, script: Script, hashType: HashType, sigHashes: TxSigHashes): ByteArray {
+    fun hashWitnessSignature(tx: Proto.Tx, index: Int, value: Long, script: Script, hashType: HashType, sigHashes: TxSigHashes): Sha256Hash {
 
         assert(index < tx.txInList.size && index >= 0)
         // we only support this now
@@ -80,7 +73,7 @@ object Hash {
         out.write(txIn.previousOutPoint.index)
 
         // write script
-        // TODO:
+        out.write(script.program)
 
         // write amount, sequence
         out.writeLong(value)
@@ -98,7 +91,7 @@ object Hash {
         // write hash type
         out.write(hashType.value)
 
-        return Sha256Hash.hashTwice(bout.toByteArray())
+        return Sha256Hash.twiceOf(bout.toByteArray())
     }
 }
 

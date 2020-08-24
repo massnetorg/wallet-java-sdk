@@ -1,15 +1,15 @@
 package org.massnet.signer
 
 object ByteUtils {
-    private const val HEX_CHARS = "0123456789ABCDEF"
+    private const val HEX_CHARS = "0123456789abcdef"
     private val HEX_CHARS_ARRAY = HEX_CHARS.toCharArray()
 
     fun String.hexToBytes(): ByteArray {
-        if (length % 2 == 1) throw IllegalArgumentException()
+        if (length % 2 == 1) throw IllegalArgumentException("Hex string must have even length.")
 
         val result = ByteArray(length / 2)
 
-        val str = this.toUpperCase()
+        val str = this.toLowerCase()
         for (i in 0 until length step 2) {
             val firstIndex = HEX_CHARS.indexOf(str[i])
             val secondIndex = HEX_CHARS.indexOf(str[i + 1])
