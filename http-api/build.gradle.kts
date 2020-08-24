@@ -24,10 +24,10 @@ java {
 
 publishing {
     publications {
-        create<MavenPublication>("mavenCentral") {
+        create<MavenPublication>("httpApi") {
             groupId = Constants.artifactGroup
             artifactId = project.name
-            version = "0.0.1"
+            version = "0.1.0"
             from(components["java"])
 
             pom {
@@ -54,9 +54,22 @@ publishing {
             }
         }
     }
+    repositories {
+        maven {
+            val snapshotUrl = uri("https://oss.sonatype.org/content/repositories/snapshots")
+            val releaseUrl = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+            url = if (version.toString().endsWith("SNAPSHOT")) snapshotUrl else releaseUrl
+            credentials {
+                val mavenUsername: String by project
+                val mavenPassword: String by project
+                username = mavenUsername
+                password = mavenPassword
+            }
+        }
+    }
 }
 
 signing {
     useGpgCmd()
-    sign(publishing.publications["mavenCentral"])
+    sign(publishing.publications["httpApi"])
 }

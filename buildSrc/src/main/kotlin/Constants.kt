@@ -1,5 +1,5 @@
 object Constants {
-    val artifactGroup = "org.massnet"
+    val artifactGroup = "org.massnet.sdk"
 
     val pomUrl = "https://github.com/massnetorg/wallet-java-sdk"
     val pomScmUrl = "https://github.com/massnetorg/wallet-java-sdk"
