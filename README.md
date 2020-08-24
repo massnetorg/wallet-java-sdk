@@ -6,12 +6,15 @@ At least Java 8 is required. Java 10+ or Kotlin is recommended for simplicity.
 
 ## HTTP API
 
+![maven centra version](https://img.shields.io/maven-central/v/org.massnet.sdk/http-api)
+
 This package wraps the HTTP API of a MassNet wallet full node.
 
 ### Install
 
-This packages is published to maven central repository as `org.massnet.sdk:http-api:0.1.0`.
-You could install it in the following ways:
+This packages is published to maven central repository as `org.massnet.sdk:http-api`.
+
+You could install it in the following ways (replace `$latest_version` with the actual version shown above):
 
 #### Maven
 
@@ -19,14 +22,14 @@ You could install it in the following ways:
 <dependency>
     <groupId>org.massnet.sdk</groupId>
     <artifactId>http-api</artifactId>
-    <version>0.1.0</version>
+    <version>$latest_version</version>
 </dependency>
 ```
 
 #### Gradle
 
 ```groovy
-implementation 'org.massnet.sdk:http-api:0.1.0'
+implementation 'org.massnet.sdk:http-api:$latest_version'
 ```
 
 #### Local build
@@ -64,11 +67,14 @@ See `HttpApi.kt` for all services, and `ApiModels.kt` for all data models used i
 
 ## Transaction Signer
 
+![maven centra version](https://img.shields.io/maven-central/v/org.massnet.sdk/tx-signer)
+
 This package is an offline transaction signer of MassNet transactions.
 
 ### Install
 
-This packages will be published to maven central repository as `org.massnet.sdk:tx-signer:0.1.0`.
+This packages will be published to maven central repository as `org.massnet.sdk:tx-signer`.
+
 See `http-api` for installation instructions.
 
 ### Usage
