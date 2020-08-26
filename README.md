@@ -91,6 +91,8 @@ See `http-api` for installation instructions.
 ### Create a transaction
 
 We recommend you to use `createRawTransaction` or `autoCreateTransaction` in HTTP API to create a raw MassNet transaction, which is encoded by ProtoBuf in hex.
+Or you can construct `org.massnet.signer.Proto.Tx` manually (by using `Proto.Tx.Builder` builder) and encode it to hex string.
+
 You can also use `decodeRawTransaction` to decode any encoded transactions.
 
 ### Sign a transaction
