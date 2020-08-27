@@ -92,5 +92,14 @@ class Address(
             val scriptHash = Utils.sha256.digest(script.program)
             return fromScriptHash(scriptHash)
         }
+
+        @JvmStatic
+        fun validate(addr: String): Address? {
+            return try {
+                fromString(addr)
+            } catch (e: Exception) {
+                null
+            }
+        }
     }
 }
