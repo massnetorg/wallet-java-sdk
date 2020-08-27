@@ -10,7 +10,9 @@ plugins {
 }
 
 dependencies {
-    implementation("com.google.protobuf:protobuf-java:3.13.0")
+    val protobufVersion = "3.13.0"
+    implementation("com.google.code.gson:gson:2.8.6")
+    implementation("com.google.protobuf:protobuf-java:$protobufVersion")
     implementation("org.slf4j:slf4j-simple:1.7.30")
     implementation("org.bitcoinj:bitcoinj-core:0.15.7")
 }

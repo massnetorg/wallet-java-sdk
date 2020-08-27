@@ -35,15 +35,6 @@ object Hash {
         return Sha256Hash.hashTwice(buf.array())
     }
 
-    private fun Proto.Hash.toBytes(): ByteArray {
-        val arr = ByteBuffer.allocate(32).order(ByteOrder.BIG_ENDIAN)
-        arr.putLong(this.s0)
-        arr.putLong(this.s1)
-        arr.putLong(this.s2)
-        arr.putLong(this.s3)
-        return arr.array()
-    }
-
     fun hashWitnessSignature(
         tx: Proto.Tx,
         index: Int,

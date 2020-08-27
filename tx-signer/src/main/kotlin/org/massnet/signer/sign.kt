@@ -17,17 +17,6 @@ enum class HashType(val value: Byte) {
 
 object Signer {
 
-    private fun getRedeemScript(key: ECKey): Script {
-        // OP_1 <PUBKEY> OP_1 OP_CHECKMULTISIG
-        val buf = ByteBuffer.allocate(37)
-        buf.put(OP_1.toByte())
-        buf.put(33) // length
-        buf.put(key.pubKey) // pubkey
-        buf.put(OP_1.toByte())
-        buf.put(OP_CHECKMULTISIG.toByte())
-        return Script(buf.array())
-    }
-
     private fun getSignatureScript(signature: ECKey.ECDSASignature, type: HashType): Script {
         val encoded = signature.encodeToDER();
         val size = encoded.size + 2
@@ -52,7 +41,7 @@ object Signer {
         for (i in 0 until tx.txInCount) {
             val txIn = tx.txInList[i]
             val key = keys[i]
-            val redeemScript = getRedeemScript(key)
+            val redeemScript = Address.getRedeemScript(key)
             val hash = Hash.hashWitnessSignature(tx, i, amounts[i], redeemScript, type, sigHashes)
             val signature = key.sign(hash)
             val signatureScript = getSignatureScript(signature, type)

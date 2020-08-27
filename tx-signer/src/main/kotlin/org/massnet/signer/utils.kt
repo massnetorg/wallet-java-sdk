@@ -1,5 +1,13 @@
 package org.massnet.signer
 
+import com.google.gson.*
+import org.massnet.signer.ByteUtils.hexToBytes
+import org.massnet.signer.ByteUtils.toHexString
+import java.lang.reflect.Type
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
+import java.security.MessageDigest
+
 object ByteUtils {
     private const val HEX_CHARS = "0123456789abcdef"
     private val HEX_CHARS_ARRAY = HEX_CHARS.toCharArray()
@@ -34,5 +42,37 @@ object ByteUtils {
         val firstIndex = (octet and 0xF0) ushr 4
         val secondIndex = octet and 0x0F
         return "${HEX_CHARS_ARRAY[firstIndex]}${HEX_CHARS_ARRAY[secondIndex]}"
+    }
+}
+
+fun Proto.Hash.toBytes(): ByteArray {
+    val arr = ByteBuffer.allocate(32).order(ByteOrder.BIG_ENDIAN)
+    arr.putLong(this.s0)
+    arr.putLong(this.s1)
+    arr.putLong(this.s2)
+    arr.putLong(this.s3)
+    return arr.array()
+}
+
+object Utils {
+    val sha256 by lazy {
+        MessageDigest.getInstance("SHA-256")
+    }
+
+    private class ByteArrayTypeAdapter : JsonSerializer<ByteArray>, JsonDeserializer<ByteArray> {
+        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ByteArray {
+            return json.asString.hexToBytes()
+        }
+
+        override fun serialize(src: ByteArray, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+            return JsonPrimitive(src.toHexString())
+        }
+    }
+
+    val GSON by lazy {
+        GsonBuilder()
+            .setPrettyPrinting()
+            .registerTypeHierarchyAdapter(ByteArray::class.java, ByteArrayTypeAdapter())
+            .create()
     }
 }
