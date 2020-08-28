@@ -10,9 +10,7 @@ plugins {
 }
 
 dependencies {
-    val protobufVersion = "3.13.0"
-    implementation("com.google.code.gson:gson:2.8.6")
-    implementation("com.google.protobuf:protobuf-java:$protobufVersion")
+    implementation("com.google.protobuf:protobuf-java:3.13.0")
     implementation("org.slf4j:slf4j-simple:1.7.30")
     implementation("org.bitcoinj:bitcoinj-core:0.15.7")
 }
@@ -28,7 +26,7 @@ publishing {
         create<MavenPublication>("txSigner") {
             groupId = Constants.artifactGroup
             artifactId = project.name
-            version = "0.1.0"
+            version = "0.2.0"
             from(components["java"])
 
             pom {

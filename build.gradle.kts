@@ -22,6 +22,7 @@ subprojects {
         val junitVersion = "5.6.2"
 
         implementation(kotlin("stdlib-jdk8"))
+        implementation("com.google.code.gson:gson:2.8.6")
         testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
     }

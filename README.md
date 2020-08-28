@@ -2,7 +2,7 @@
 
 ## Requirements
 
-At least Java 8 is required. Java 10+ or Kotlin is recommended for simplicity.
+Java 8+ is required. Java 10+ or Kotlin is recommended for simplicity.
 
 ## HTTP API
 
@@ -93,8 +93,8 @@ All methods and classes are in `org.massnet.signer.Address`.
 #### Create an address (and its key)
 
 ```java
-var seed = SecureRandom.getSeed(256);
-var pair = Address.create(seed, false);
+var seed = java.security.SecureRandom.getSeed(256);
+var pair = Address.create(seed, false); // set to true for a staking address
 System.out.println(pair.getFirst()); // address
 System.out.println(pair.getSecond()); // private key
 ```
@@ -116,14 +116,15 @@ if (parsed == null) {
 }
 ```
 
-It actually calls `Address.fromString()`, and returns `null` when any exception happens.
+It actually calls `Address.fromString()`, 
+and returns `null` when it throws any exception, or an `Address` when it succeeds.
 
 You could also construct an address manually:
 
 ```java
 var fromString = Address.fromString("ms1yyyyyyyy"); // might throw Exception if not valid
 var fromScriptHash = Address.fromScriptHash(hash, false); // hash must be 32 bytes long
-var fromPubKey = Address.fromPubKey(key, false); // key must have a compressed public key (33 bytes)
+var fromPubKey = Address.fromPubKey(key, false); // key must be an ECKey with a compressed public key (33 bytes)
 ```
 
 ### Transaction
