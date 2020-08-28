@@ -77,7 +77,7 @@ object ProtoTest {
     fun testCreateAndValidateAddress() {
         assert(Address.validate("ggg") == null)
         assert(Address.validate("ms1qq2fvx7rqsz7e5j7s8ght22wgv6fhrfu7n4julrgxnmf7ysln5us4s7w3yqj") != null)
-        val (addr, key) = Address.create(SecureRandom.getSeed(256), false)
+        val (addr, key) = Address.create(SecureRandom.getSeed(32), false)
         assert(Address.validate(addr) != null)
         assert(Address.fromPubKey(ECKey.fromPrivate(key.hexToBytes(), true), false).encodeToString() == addr)
     }

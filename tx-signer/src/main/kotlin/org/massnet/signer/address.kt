@@ -107,8 +107,8 @@ class Address(
 
         @JvmStatic
         fun create(seed: ByteArray, isStaking: Boolean = false): Pair<String, String> {
-            if (seed.size < 256) {
-                throw IllegalArgumentException("Seed must be at least 256 bits long")
+            if (seed.size < 16) {
+                throw IllegalArgumentException("Seed must be at least 128 bits long")
             }
             // generate master key from seed
             val masterKey = HDKeyDerivation.createMasterPrivateKey(seed)

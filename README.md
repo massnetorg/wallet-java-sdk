@@ -6,7 +6,7 @@ Java 8+ is required. Java 10+ or Kotlin is recommended for simplicity.
 
 ## HTTP API
 
-![maven centra version](https://img.shields.io/maven-central/v/org.massnet.sdk/http-api)
+![maven central version](https://img.shields.io/maven-central/v/org.massnet.sdk/http-api)
 
 This package wraps the HTTP API of a MassNet wallet full node.
 
@@ -76,7 +76,7 @@ and you can add a handler in `doOnError` to process.
 
 ## Transaction Signer
 
-![maven centra version](https://img.shields.io/maven-central/v/org.massnet.sdk/tx-signer)
+![maven central version](https://img.shields.io/maven-central/v/org.massnet.sdk/tx-signer)
 
 This package is an offline transaction signer of MassNet transactions.
 
@@ -93,11 +93,13 @@ All methods and classes are in `org.massnet.signer.Address`.
 #### Create an address (and its key)
 
 ```java
-var seed = java.security.SecureRandom.getSeed(256);
+var seed = java.security.SecureRandom.getSeed(32); // 256 bits seed
 var pair = Address.create(seed, false); // set to true for a staking address
 System.out.println(pair.getFirst()); // address
 System.out.println(pair.getSecond()); // private key
 ```
+
+`seed` must be at least 128 bits long, and 256 bits is recommended.
 
 The private key is derived with path `m/44'/297'/1'/0/` from the master key generated from the provided seed.
 
@@ -108,11 +110,13 @@ If key generation fails (e.g., the private key happens to be 0 or larger than N)
 To validate an address:
 
 ```java
-var parsed = Address.validate("ms1xxxxxxxxxx");
+var source = "ms1xxxxxxxxxx";
+var parsed = Address.validate(source);
 if (parsed == null) {
     // not valid
 } else {
-    // valid
+    // valid, and can be encoded back
+    assert(parsed.encodeToString().equals(source));
 }
 ```
 
