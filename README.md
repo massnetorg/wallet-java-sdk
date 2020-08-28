@@ -86,23 +86,60 @@ This packages will be published to maven central repository as `org.massnet.sdk:
 
 See `http-api` for installation instructions.
 
-### Usage
+### Address
 
-### Create a transaction
+All methods and classes are in `org.massnet.signer.Address`.
+
+#### Create an address (and its key)
+
+```java
+var seed = SecureRandom.getSeed(256);
+var pair = Address.create(seed, false);
+System.out.println(pair.getFirst()); // address
+System.out.println(pair.getSecond()); // private key
+```
+
+The private key is derived with path `m/44'/297'/1'/0/` from the master key generated from the provided seed.
+
+If key generation fails (e.g., the private key happens to be 0 or larger than N), an `HDDerivationException` will be thrown.
+
+#### Parse & validate addresses
+
+To validate an address:
+
+```java
+var parsed = Address.validate("ms1xxxxxxxxxx");
+if (parsed == null) {
+    // not valid
+} else {
+    // valid
+}
+```
+
+It actually calls `Address.fromString()`, and returns `null` when any exception happens.
+
+You could also construct an address manually:
+
+```java
+var fromString = Address.fromString("ms1yyyyyyyy"); // might throw Exception if not valid
+var fromScriptHash = Address.fromScriptHash(hash, false); // hash must be 32 bytes long
+var fromPubKey = Address.fromPubKey(key, false); // key must have a compressed public key (33 bytes)
+```
+
+### Transaction
+
+All methods and classes are in `org.massnet.signer.Signer`.
+
+#### Create transactions
 
 We recommend you to use `createRawTransaction` or `autoCreateTransaction` in HTTP API to create a raw MassNet transaction, which is encoded by ProtoBuf in hex.
 Or you can construct `org.massnet.signer.Proto.Tx` manually (by using `Proto.Tx.Builder` builder) and encode it to hex string.
 
 You can also use `decodeRawTransaction` to decode any encoded transactions.
 
-### Sign a transaction
-
-You could use the tools in `org.massnet.signer` to sign a transaction.
+#### Sign transactions
 
 ```java
-import org.massnet.signer.*;
-...
-
 var unsigned = "xxxx"; // you unsigned transaction in hex format
 // list of private keys, each corresponding to a input
 var priv = List.of(
@@ -122,7 +159,24 @@ To produce a correct signature, you must provide each input in the transaction w
 * the private key associated with the address (derived by BIP32, 256 bits)
 * the amount of the UTXO on the address (in the unit of SAT, a.k.a. 10^-8)
 
-### Send a transaction
+#### Send transactions
 
 Once you obtain the signed transaction by using `signRawTransaction`,
 you could send it to the chain with `sendRawTransaction` in the HTTP API.
+
+#### Decode transactions
+
+You could use `decodeRawTransaction` in HTTP API to get the JSON representation of a transaction.
+
+We also provide a `Transaction` class for converting in Java.
+Note that this class is different from `Proto.Tx`, which is the internal structure used by `Signer`.
+
+```java
+// directly obtain JSON
+var json = Transaction.decodeRawToJson("080112a4010a280a24091fc29fe6a799515d11b457408abbafe...");
+System.out.println(json);
+
+// or if you want an instance
+var transaction = Transaction.fromProtoTx(tx); // tx is a Proto.Tx
+System.out.println(transaction.version);
+```

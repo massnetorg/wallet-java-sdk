@@ -3,7 +3,6 @@ package org.massnet.signer
 import com.google.protobuf.ByteString
 import org.bitcoinj.core.ECKey
 import org.bitcoinj.script.Script
-import org.bitcoinj.script.ScriptOpCodes.*
 import org.massnet.signer.ByteUtils.hexToBytes
 import org.massnet.signer.ByteUtils.toHexString
 import java.nio.ByteBuffer

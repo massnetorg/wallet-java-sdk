@@ -2,11 +2,9 @@ package org.massnet.signer
 
 import org.bitcoinj.core.Bech32
 import org.bitcoinj.core.ECKey
-import org.bitcoinj.crypto.HDDerivationException
 import org.bitcoinj.crypto.HDKeyDerivation
 import org.bitcoinj.script.Script
 import org.bitcoinj.script.ScriptOpCodes
-import org.massnet.signer.ByteUtils.hexToBytes
 import java.nio.ByteBuffer
 import java.util.*
 import kotlin.experimental.and
@@ -108,7 +106,6 @@ class Address(
         }
 
         @JvmStatic
-        @Throws(HDDerivationException::class)
         fun create(seed: ByteArray, isStaking: Boolean = false): Pair<String, String> {
             if (seed.size < 256) {
                 throw IllegalArgumentException("Seed must be at least 256 bits long")
