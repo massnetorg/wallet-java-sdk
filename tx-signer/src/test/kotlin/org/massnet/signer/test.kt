@@ -5,6 +5,7 @@ import org.massnet.signer.ByteUtils.toHexString
 import org.bitcoinj.core.ECKey
 import org.bitcoinj.script.Script
 import org.junit.jupiter.api.Test
+import java.security.SecureRandom
 
 object ProtoTest {
 
@@ -73,8 +74,11 @@ object ProtoTest {
     }
     
     @Test
-    fun testValidateAddress() {
+    fun testCreateAndValidateAddress() {
         assert(Address.validate("ggg") == null)
         assert(Address.validate("ms1qq2fvx7rqsz7e5j7s8ght22wgv6fhrfu7n4julrgxnmf7ysln5us4s7w3yqj") != null)
+        val (addr, key) = Address.create(SecureRandom.getSeed(256), false)
+        assert(Address.validate(addr) != null)
+        assert(Address.fromPubKey(ECKey.fromPrivate(key.hexToBytes(), true), false).encodeToString() == addr)
     }
 }

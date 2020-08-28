@@ -2,6 +2,7 @@ package org.massnet.signer;
 
 import org.junit.jupiter.api.Test;
 
+import java.security.SecureRandom;
 import java.util.List;
 
 public class sign {
@@ -15,6 +16,10 @@ public class sign {
         );
         var amounts = List.of(899999708L, 799997080L);
         var signed = Signer.signRawTransaction(unsigned, amounts, priv, HashType.SigHashAll);
-
+        System.out.println(signed);
+        var seed = SecureRandom.getSeed(256);
+        var pair = Address.create(seed, false);
+        System.out.println(pair.getFirst()); // address
+        System.out.println(pair.getSecond()); // private key
     }
 }

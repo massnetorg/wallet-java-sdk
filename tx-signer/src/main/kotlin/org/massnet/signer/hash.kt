@@ -2,7 +2,6 @@ package org.massnet.signer
 
 import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.script.Script
-import org.massnet.signer.ByteUtils.toHexString
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 

@@ -2,8 +2,11 @@ package org.massnet.signer
 
 import org.bitcoinj.core.Bech32
 import org.bitcoinj.core.ECKey
+import org.bitcoinj.crypto.HDDerivationException
+import org.bitcoinj.crypto.HDKeyDerivation
 import org.bitcoinj.script.Script
 import org.bitcoinj.script.ScriptOpCodes
+import org.massnet.signer.ByteUtils.hexToBytes
 import java.nio.ByteBuffer
 import java.util.*
 import kotlin.experimental.and
@@ -28,6 +31,8 @@ class Address(
         System.arraycopy(encodedScript, 0, buf, 2, encodedScript.size)
         return Bech32.encode("ms", buf)
     }
+
+    val isStaking = extVersion == 1
 
     companion object {
 
@@ -66,10 +71,10 @@ class Address(
         }
 
         @JvmStatic
-        fun fromScriptHash(hash: ByteArray): Address {
+        fun fromScriptHash(hash: ByteArray, isStaking: Boolean = false): Address {
             // only common address, no binding or staking
             require(hash.size == 32)
-            return Address(0, 0, hash)
+            return Address(0, if (isStaking) 1 else 0, hash)
         }
 
         @JvmStatic
@@ -87,10 +92,10 @@ class Address(
         }
 
         @JvmStatic
-        fun fromPubKey(pubKey: ECKey): Address {
+        fun fromPubKey(pubKey: ECKey, isStaking: Boolean = false): Address {
             val script = getRedeemScript(pubKey)
             val scriptHash = Utils.sha256.digest(script.program)
-            return fromScriptHash(scriptHash)
+            return fromScriptHash(scriptHash, isStaking)
         }
 
         @JvmStatic
@@ -100,6 +105,23 @@ class Address(
             } catch (e: Exception) {
                 null
             }
+        }
+
+        @JvmStatic
+        @Throws(HDDerivationException::class)
+        fun create(seed: ByteArray, isStaking: Boolean = false): Pair<String, String> {
+            if (seed.size < 256) {
+                throw IllegalArgumentException("Seed must be at least 256 bits long")
+            }
+            // generate master key from seed
+            val masterKey = HDKeyDerivation.createMasterPrivateKey(seed)
+            // derive private key using BIP44 (m/44'/297'/1'/0/)
+            val intermediateKey = masterKey.derive(44).derive(297).derive(1) // hardened
+            val privateKey = HDKeyDerivation.deriveChildKey(intermediateKey, 0) // non-hardened
+            // generate address with the sub key
+            val key = ECKey.fromPrivate(privateKey.privKeyBytes, true)
+            val addr = fromPubKey(key, isStaking)
+            return Pair(addr.encodeToString(), key.privateKeyAsHex)
         }
     }
 }
