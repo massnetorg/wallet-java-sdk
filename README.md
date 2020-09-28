@@ -138,7 +138,7 @@ All methods and classes are in `org.massnet.signer.Signer`.
 #### Create transactions
 
 We recommend you to use `createRawTransaction` or `autoCreateTransaction` in HTTP API to create a raw MassNet transaction, which is encoded by ProtoBuf in hex.
-Or you can construct `org.massnet.signer.Proto.Tx` manually (by using `Proto.Tx.Builder` builder) and encode it to hex string.
+Or you can construct `org.massnet.signer.Proto.Tx` manually (by using `Proto.Tx.Builder` builder, see `src/test/java/org/massnet/signed/sign.java` for an example) and encode it to hex string.
 
 You can also use `decodeRawTransaction` to decode any encoded transactions.
 
