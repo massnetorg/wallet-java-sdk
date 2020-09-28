@@ -1,10 +1,12 @@
 package org.massnet.signer
 
+import com.google.protobuf.ByteString
 import org.massnet.signer.ByteUtils.hexToBytes
 
 class Transaction(
     var version: Int,
     var lockTime: Long,
+    var payload: ByteArray,
     var vin: List<Input>,
     var vout: List<Output>
 ) {
@@ -14,13 +16,46 @@ class Transaction(
         var sequence: Long,
         var witness: List<ByteArray>,
         var address: String? = null
-    )
+    ) {
+        fun toProtoTxIn(): Proto.TxIn {
+            val builder = Proto.TxIn.newBuilder()
+            builder.sequence = sequence
+            val outputBuilder = Proto.OutPoint.newBuilder()
+            outputBuilder.hash = Proto.Hash.parseFrom(hash)
+            outputBuilder.index = index
+            builder.previousOutPoint = outputBuilder.build()
+            return builder.build()
+        }
+    }
 
     class Output(
         var value: Long,
         var pkScript: ByteArray
     ) {
-        lateinit var address: String
+
+        var address: String
+
+        init {
+            val scriptHash = pkScript.drop(2).toByteArray() // OP_0 OP_LEN ScriptHash
+            address = Address.fromScriptHash(scriptHash).encodeToString()
+        }
+
+        fun toProtoTxOut(): Proto.TxOut {
+            val builder = Proto.TxOut.newBuilder()
+            builder.value = value
+            builder.pkScript = ByteString.copyFrom(pkScript)
+            return builder.build()
+        }
+    }
+
+    fun toProtoTx(): Proto.Tx {
+        val builder = Proto.Tx.newBuilder()
+        builder.version = version
+        builder.lockTime = lockTime
+        builder.payload = ByteString.copyFrom(payload)
+        vin.forEach { v -> builder.addTxIn(v.toProtoTxIn()) }
+        vout.forEach { v -> builder.addTxOut(v.toProtoTxOut()) }
+        return builder.build()
     }
 
     fun toJson(): String {
@@ -44,10 +79,7 @@ class Transaction(
         }
 
         private fun Proto.TxOut.toOutput(): Output {
-            val output = Output(this.value, this.pkScript.toByteArray())
-            val scriptHash = output.pkScript.drop(2).toByteArray() // OP_0 OP_LEN ScriptHash
-            output.address = Address.fromScriptHash(scriptHash).encodeToString()
-            return output
+            return Output(value, pkScript.toByteArray())
         }
 
         @JvmStatic
@@ -55,6 +87,7 @@ class Transaction(
             return Transaction(
                 tx.version,
                 tx.lockTime,
+                tx.payload.toByteArray(),
                 tx.txInList.map { it.toInput() },
                 tx.txOutList.map { it.toOutput() })
         }

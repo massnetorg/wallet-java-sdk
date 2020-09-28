@@ -53,11 +53,20 @@ object Signer {
     }
 
     @JvmStatic
-    fun signRawTransaction(hex: String, amounts: List<Long>, privateKeys: List<String>, type: HashType): String {
-        val tx = Proto.Tx.parseFrom(hex.hexToBytes())
+    fun signTransaction(tx: Proto.Tx, amounts: List<Long>, privateKeys: List<String>, type: HashType): String {
         // create key pair
         val keys = privateKeys.map { ECKey.fromPrivate(it.hexToBytes(), true) }
         val signedTx = signTransaction(tx, amounts, keys, type)
         return signedTx.toByteArray().toHexString()
+    }
+
+    @JvmStatic
+    fun signTransaction(tx: Transaction, amounts: List<Long>, privateKeys: List<String>, type: HashType): String {
+        return signTransaction(tx.toProtoTx(), amounts, privateKeys, type)
+    }
+
+    @JvmStatic
+    fun signRawTransaction(hex: String, amounts: List<Long>, privateKeys: List<String>, type: HashType): String {
+        return signTransaction(Proto.Tx.parseFrom(hex.hexToBytes()), amounts, privateKeys, type)
     }
 }

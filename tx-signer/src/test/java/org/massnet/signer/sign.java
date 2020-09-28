@@ -26,44 +26,16 @@ public class sign {
 
     @Test
     void testCreateTransaction() {
-        var tx = Proto.Tx.newBuilder();
-        // set metadata
-        tx.setLockTime(0);
-        tx.setPayload(ByteString.EMPTY);
-        tx.setVersion(0);
-        // add txIn
-        // for in in inputs
-        {
-            var in = Proto.TxIn.newBuilder();
-            in.setSequence(-1);
-            var outPoint = Proto.OutPoint.newBuilder();
-            var hash = Proto.Hash.newBuilder();
-            hash.setS0(1);
-            hash.setS1(1);
-            hash.setS2(1);
-            hash.setS3(1);
-            outPoint.setHash(hash.build());
-            outPoint.setIndex(0);
-            in.setPreviousOutPoint(outPoint.build());
-            // do not set witness: will be overridden when signing
-            tx.addTxIn(in.build());
-        }
-        // add txOut
-        // for out in outputs
-        {
-            var output = Proto.TxOut.newBuilder();
-            output.setValue(1000000);
-            var address = Address.fromString("ms1qq8k8g3kfn23faudluydaadjj3g3fqme2jzz7hdut4lp656r3humuqmkwmmy");
-            var scriptHash = address.getScriptHash();
-            var pkScript = new byte[1 + 1 + 32];
-            pkScript[0] = 0x0; // OP_0
-            pkScript[1] = 0x20; // length
-            System.arraycopy(scriptHash, 0, pkScript, 2, 32);
-            output.setPkScript(ByteString.copyFrom(pkScript)); // pay to script hash: 0x00 [PUBKEY_SCRIPT]
-            tx.addTxOut(output);
-        }
-        var rawTx = tx.build();
-        System.out.println(Transaction.fromProtoTx(rawTx).toJson());
-        // Signer.signTransaction(rawTx, ...)
+        var vin = List.of(
+            // no need to provide witness and address
+            new Transaction.Input(new byte[64], 0, -1, List.of(), null),
+            new Transaction.Input(new byte[64], 0, -1, List.of(), null)
+        );
+        var vout = List.of(
+            new Transaction.Output(1000, Address.fromString("ms1qq8k8g3kfn23faudluydaadjj3g3fqme2jzz7hdut4lp656r3humuqmkwmmy").getPkScript()),
+            new Transaction.Output(1000, Address.fromString("ms1qq8k8g3kfn23faudluydaadjj3g3fqme2jzz7hdut4lp656r3humuqmkwmmy").getPkScript())
+        );
+        var tx = new Transaction(1, 0, new byte[0], vin, vout);
+        System.out.println(tx.toJson());
     }
 }

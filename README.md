@@ -138,14 +138,17 @@ All methods and classes are in `org.massnet.signer.Signer`.
 #### Create transactions
 
 We recommend you to use `createRawTransaction` or `autoCreateTransaction` in HTTP API to create a raw MassNet transaction, which is encoded by ProtoBuf in hex.
-Or you can construct `org.massnet.signer.Proto.Tx` manually (by using `Proto.Tx.Builder` builder, see `src/test/java/org/massnet/signed/sign.java` for an example) and encode it to hex string.
+Or you can construct a `Transaction` manually (`src/test/java/org/massnet/signed/sign.java` for an example) and use it for signing
 
 You can also use `decodeRawTransaction` to decode any encoded transactions.
 
 #### Sign transactions
 
 ```java
+// you may choose from:
 var unsigned = "xxxx"; // you unsigned transaction in hex format
+var unsigned = new Transaction(...); // use Transaction class
+var unsigned = Proto.Tx(...); // use Proto.tx class
 // list of private keys, each corresponding to a input
 var priv = List.of(
     "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
@@ -174,7 +177,7 @@ you could send it to the chain with `sendRawTransaction` in the HTTP API.
 You could use `decodeRawTransaction` in HTTP API to get the JSON representation of a transaction.
 
 We also provide a `Transaction` class for converting in Java.
-Note that this class is different from `Proto.Tx`, which is the internal structure used by `Signer`.
+Note that **this class is different from** `Proto.Tx`, which is the internal structure used by `Signer`.
 
 ```java
 // directly obtain JSON
@@ -182,6 +185,6 @@ var json = Transaction.decodeRawToJson("080112a4010a280a24091fc29fe6a799515d11b4
 System.out.println(json);
 
 // or if you want an instance
-var transaction = Transaction.fromProtoTx(tx); // tx is a Proto.Tx
-System.out.println(transaction.version);
+var protoTx = Transaction.fromProtoTx(tx); // tx is a Proto.Tx
+System.out.println(protoTx.version);
 ```

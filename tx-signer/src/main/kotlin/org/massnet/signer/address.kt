@@ -30,6 +30,15 @@ class Address(
         return Bech32.encode("ms", buf)
     }
 
+    fun getPkScript(): ByteArray {
+        // OP_0 <REDEEM_SCRIPT_HASH>
+        val buf = ByteBuffer.allocate(34)
+        buf.put(ScriptOpCodes.OP_0.toByte())
+        buf.put(32) // length
+        buf.put(scriptHash) // script hash
+        return Script(buf.array()).program
+    }
+
     val isStaking = extVersion == 1
 
     companion object {
