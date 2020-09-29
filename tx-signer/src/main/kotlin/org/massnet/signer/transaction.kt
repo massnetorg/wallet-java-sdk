@@ -2,6 +2,7 @@ package org.massnet.signer
 
 import com.google.protobuf.ByteString
 import org.massnet.signer.ByteUtils.hexToBytes
+import org.massnet.signer.ByteUtils.toProtoHash
 
 class Transaction(
     var version: Int,
@@ -21,9 +22,12 @@ class Transaction(
             val builder = Proto.TxIn.newBuilder()
             builder.sequence = sequence
             val outputBuilder = Proto.OutPoint.newBuilder()
-            outputBuilder.hash = Proto.Hash.parseFrom(hash)
+            outputBuilder.hash = hash.toProtoHash()
             outputBuilder.index = index
             builder.previousOutPoint = outputBuilder.build()
+            if (!this.witness.isNullOrEmpty()) {
+                builder.addAllWitness(this.witness.map(ByteString::copyFrom))
+            }
             return builder.build()
         }
     }
@@ -64,7 +68,8 @@ class Transaction(
 
     companion object {
 
-        private fun Proto.TxIn.toInput(): Input {
+        @JvmStatic
+        fun Proto.TxIn.toInput(): Input {
             val input = Input(
                 this.previousOutPoint.hash.toBytes(),
                 this.previousOutPoint.index,
@@ -78,7 +83,8 @@ class Transaction(
             return input
         }
 
-        private fun Proto.TxOut.toOutput(): Output {
+        @JvmStatic
+        fun Proto.TxOut.toOutput(): Output {
             return Output(value, pkScript.toByteArray())
         }
 

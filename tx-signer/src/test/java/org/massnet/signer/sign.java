@@ -1,10 +1,10 @@
 package org.massnet.signer;
 
-import com.google.protobuf.ByteString;
 import org.junit.jupiter.api.Test;
 
 import java.security.SecureRandom;
 import java.util.List;
+import java.util.Random;
 
 public class sign {
     @Test
@@ -25,11 +25,30 @@ public class sign {
     }
 
     @Test
+    void testParseHash() throws Exception {
+        var hashStr = "807b26a916bcd6338a5b715f053d9f8bb6d8d188b7770df8a57447891f7341cd";
+        var hashBuilder = Proto.Hash.newBuilder();
+
+        hashBuilder.setS0(Long.parseUnsignedLong(hashStr.substring(0,  16), 16));
+        hashBuilder.setS1(Long.parseUnsignedLong(hashStr.substring(16, 32), 16));
+        hashBuilder.setS2(Long.parseUnsignedLong(hashStr.substring(32, 48), 16));
+        hashBuilder.setS3(Long.parseUnsignedLong(hashStr.substring(48, 64), 16));
+        System.out.println(hashBuilder.build().toString());
+    }
+
+
+    @Test
     void testCreateTransaction() {
+        var inputHash = new byte[32];
+        var random = new Random();
+        var input = ByteUtils.INSTANCE.hexToBytes("807b26a916bcd6338a5b715f053d9f8bb6d8d188b7770df8a57447891f7341cd");
+        for (int i = 0; i < 32; ++i) {
+            inputHash[i] = (byte) random.nextInt(256);
+        }
         var vin = List.of(
-            // no need to provide witness and address
-            new Transaction.Input(new byte[64], 0, -1, List.of(), null),
-            new Transaction.Input(new byte[64], 0, -1, List.of(), null)
+            // no need to provide witness and address if only used for signing
+            new Transaction.Input(input, 0, -1, List.of(), null),
+            new Transaction.Input(input, 0, -1, List.of(), null)
         );
         var vout = List.of(
             new Transaction.Output(1000, Address.fromString("ms1qq8k8g3kfn23faudluydaadjj3g3fqme2jzz7hdut4lp656r3humuqmkwmmy").getPkScript()),
@@ -37,5 +56,14 @@ public class sign {
         );
         var tx = new Transaction(1, 0, new byte[0], vin, vout);
         System.out.println(tx.toJson());
+
+        // convert to Proto.Tx
+        var protoTx = tx.toProtoTx();
+        System.out.println(protoTx.toString());
+
+        // sign, either Proto.Tx, Transaction or hex string can be accepted
+        // var signedTx = Signer.signTransaction(protoTx, ...);
+        // var signedTx = Signer.signTransaction(tx, ...);
+        // var signedTx = Signer.signRawTransaction(hex, ...);
     }
 }

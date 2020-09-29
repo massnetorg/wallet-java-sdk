@@ -26,7 +26,7 @@ publishing {
         create<MavenPublication>("txSigner") {
             groupId = Constants.artifactGroup
             artifactId = project.name
-            version = "0.2.2"
+            version = "0.3.0"
             from(components["java"])
 
             pom {

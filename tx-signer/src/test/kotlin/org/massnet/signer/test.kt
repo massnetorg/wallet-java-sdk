@@ -1,10 +1,11 @@
 package org.massnet.signer
 
-import org.massnet.signer.ByteUtils.hexToBytes
-import org.massnet.signer.ByteUtils.toHexString
 import org.bitcoinj.core.ECKey
 import org.bitcoinj.script.Script
 import org.junit.jupiter.api.Test
+import org.massnet.signer.ByteUtils.hexToBytes
+import org.massnet.signer.ByteUtils.toHexString
+import org.massnet.signer.ByteUtils.toProtoHash
 import java.security.SecureRandom
 
 object ProtoTest {
@@ -29,6 +30,9 @@ object ProtoTest {
             println("In")
             println(script)
         }
+
+        val txParsed = Transaction.fromProtoTx(transaction).toProtoTx()
+        println(txParsed)
     }
 
     @Test
@@ -80,5 +84,11 @@ object ProtoTest {
         val (addr, key) = Address.create(SecureRandom.getSeed(32), false)
         assert(Address.validate(addr) != null)
         assert(Address.fromPubKey(ECKey.fromPrivate(key.hexToBytes(), true), false).encodeToString() == addr)
+    }
+
+    @Test
+    fun testCreateTransaction() {
+        val hashStr = "807b26a916bcd6338a5b715f053d9f8bb6d8d188b7770df8a57447891f7341cd"
+        assert(hashStr.toProtoHash().toBytes().toHexString() == hashStr)
     }
 }
