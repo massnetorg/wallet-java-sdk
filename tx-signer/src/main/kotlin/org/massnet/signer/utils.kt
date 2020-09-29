@@ -47,10 +47,10 @@ object ByteUtils {
     fun String.toProtoHash(): Proto.Hash {
         require(this.length == 64)
         val builder = Proto.Hash.newBuilder()
-        builder.s0 = java.lang.Long.parseUnsignedLong(this, 0, 16, 16)
-        builder.s1 = java.lang.Long.parseUnsignedLong(this, 16,32, 16)
-        builder.s2 = java.lang.Long.parseUnsignedLong(this, 32,48, 16)
-        builder.s3 = java.lang.Long.parseUnsignedLong(this, 48,64, 16)
+        builder.s0 = java.lang.Long.parseUnsignedLong(this.substring(0,  16), 16)
+        builder.s1 = java.lang.Long.parseUnsignedLong(this.substring(16, 32), 16)
+        builder.s2 = java.lang.Long.parseUnsignedLong(this.substring(32, 48), 16)
+        builder.s3 = java.lang.Long.parseUnsignedLong(this.substring(48, 64), 16)
         return builder.build()
     }
 

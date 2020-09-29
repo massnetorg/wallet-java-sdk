@@ -8,12 +8,12 @@ public class HttpApi {
     @Test
     public void testHttpApiWithJava() {
         // create API service
-        var api = MassNetApiV1Impl.getDefaultService();
+        MassNetApiV1 api = MassNetApiV1Impl.getDefaultService();
         // GET client status
-        var status = api.getClientStatus().blockingGet();
+        ClientStatus status = api.getClientStatus().blockingGet();
         System.out.println(status);
         // send a POST request & print results
-        var req = new CreateWalletRequest("12345678", "wallet_1", null);
+        CreateWalletRequest req = new CreateWalletRequest("12345678", "wallet_1", null);
         System.out.println(req);
         api.createWallet(req)
             .subscribeOn(Schedulers.io())

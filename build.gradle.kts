@@ -50,13 +50,6 @@ subprojects {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    tasks {
-        compileTestJava {
-            sourceCompatibility = JavaVersion.VERSION_1_10.toString()
-            targetCompatibility = JavaVersion.VERSION_1_10.toString()
-        }
-    }
-
     publishing {
         repositories {
             maven {
