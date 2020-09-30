@@ -29,6 +29,7 @@ public class sign {
         Pair<String, String> pair = Address.create(seed, false);
         System.out.println(pair.getFirst()); // address
         System.out.println(pair.getSecond()); // private key
+
     }
 
     @Test
@@ -69,10 +70,19 @@ public class sign {
         // generate transaction
         Transaction tx = new Transaction(1, 0, new byte[0], vin, vout);
         System.out.println(tx.toJson());
+        System.out.println(tx.id()); // transaction id
 
         // convert to Proto.Tx
         Proto.Tx protoTx = tx.toProtoTx();
         System.out.println(protoTx.toString());
+
+        // convert to JSON
+        String json = tx.toJson();
+        System.out.println(json);
+
+        // convert from JSON
+        Transaction fromJson = Utils.INSTANCE.getGSON().fromJson("{}", Transaction.class); // NOTE: replace with your json
+        System.out.println(fromJson.toJson());
 
         // sign, either Proto.Tx, Transaction or hex string can be accepted
         // var signedTx = Signer.signTransaction(protoTx, ...);

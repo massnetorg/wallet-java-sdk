@@ -31,8 +31,10 @@ object ProtoTest {
             println(script)
         }
 
-        val txParsed = Transaction.fromProtoTx(transaction).toProtoTx()
-        println(txParsed)
+        val txParsed = Transaction.fromProtoTx(transaction)
+        println(txParsed.toProtoTx())
+
+        println(txParsed.id())
     }
 
     @Test

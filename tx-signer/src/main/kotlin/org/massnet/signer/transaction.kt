@@ -1,8 +1,12 @@
 package org.massnet.signer
 
 import com.google.protobuf.ByteString
+import org.bitcoinj.core.Sha256Hash
 import org.massnet.signer.ByteUtils.hexToBytes
+import org.massnet.signer.ByteUtils.toHexString
 import org.massnet.signer.ByteUtils.toProtoHash
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 
 class Transaction(
     var version: Int,
@@ -30,6 +34,20 @@ class Transaction(
             }
             return builder.build()
         }
+
+        fun toBytes(includeWitness: Boolean): ByteArray {
+            val noWitnessSize = hash.size + 4 + 8
+            val size = if (includeWitness) noWitnessSize + witness.sumBy { w -> w.size } else noWitnessSize
+            val buf = ByteBuffer.allocate(size).order(ByteOrder.LITTLE_ENDIAN)
+            val hashBuf = ByteBuffer.wrap(hash).order(ByteOrder.BIG_ENDIAN).asReadOnlyBuffer()
+            (0..3).forEach{ i -> buf.putLong(hashBuf.getLong(i)) }
+            buf.putInt(index)
+            if (includeWitness) {
+                witness.forEach { w -> buf.put(w) }
+            }
+            buf.putLong(sequence)
+            return buf.array()
+        }
     }
 
     class Output(
@@ -50,6 +68,13 @@ class Transaction(
             builder.pkScript = ByteString.copyFrom(pkScript)
             return builder.build()
         }
+
+        fun toBytes(): ByteArray {
+            val buf = ByteBuffer.allocate(8 + pkScript.size).order(ByteOrder.LITTLE_ENDIAN)
+            buf.putLong(value)
+            buf.put(pkScript)
+            return buf.array()
+        }
     }
 
     fun toProtoTx(): Proto.Tx {
@@ -64,6 +89,21 @@ class Transaction(
 
     fun toJson(): String {
         return Utils.GSON.toJson(this)
+    }
+
+    fun toBytes(includeWitness: Boolean): ByteArray {
+        val buf = ByteBuffer.allocate(1.shl(20)).order(ByteOrder.LITTLE_ENDIAN)
+        buf.putInt(version)
+        vin.forEach { i -> buf.put(i.toBytes(includeWitness)) }
+        vout.forEach { o -> buf.put(o.toBytes()) }
+        buf.putLong(lockTime)
+        buf.put(payload)
+        return buf.array().sliceArray(0 until buf.position())
+    }
+
+    fun id(): String {
+        val hash = Sha256Hash.twiceOf(toBytes(false))
+        return hash.bytes.toHexString()
     }
 
     companion object {
