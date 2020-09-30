@@ -101,7 +101,7 @@ class Transaction(
         return buf.array().sliceArray(0 until buf.position())
     }
 
-    fun id(): String {
+    fun getHash(): String {
         val hash = Sha256Hash.twiceOf(toBytes(false))
         return hash.bytes.toHexString()
     }

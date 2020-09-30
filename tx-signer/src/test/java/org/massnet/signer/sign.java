@@ -70,7 +70,7 @@ public class sign {
         // generate transaction
         Transaction tx = new Transaction(1, 0, new byte[0], vin, vout);
         System.out.println(tx.toJson());
-        System.out.println(tx.id()); // transaction id
+        System.out.println(tx.getHash()); // transaction id (hash)
 
         // convert to Proto.Tx
         Proto.Tx protoTx = tx.toProtoTx();

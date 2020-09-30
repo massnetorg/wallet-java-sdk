@@ -34,7 +34,7 @@ object ProtoTest {
         val txParsed = Transaction.fromProtoTx(transaction)
         println(txParsed.toProtoTx())
 
-        println(txParsed.id())
+        println(txParsed.getHash())
     }
 
     @Test
