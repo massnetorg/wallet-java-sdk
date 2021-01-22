@@ -18,6 +18,15 @@ public class HttpApi {
         String clientStatusJson = ModelSerializer.getGSON().toJson(status);
         System.out.println(clientStatusJson);
 
+        // show wallets
+        System.out.println(api.wallets().blockingGet());
+        // use a specific wallet
+        System.out.println(api.useWallet(new UseWalletRequest("ac10c0x9ntq0yzsywx2ejw79jmzwdmp4w2c5pyv39m")).blockingGet());
+        // show addresses in the current wallet
+        System.out.println(api.getAddresses(0).blockingGet());
+        // validate any address
+        System.out.println(api.validateAddress("ms1qqxumj9nnhhy3rew90uhe3we2tg7n2kx0ect8tyhv93g08e4pngc0s8p577k").blockingGet());
+
         // or send a POST request & print results using RxJava
         CreateWalletRequest req = new CreateWalletRequest("12345678", "wallet_1", null);
         System.out.println(req);

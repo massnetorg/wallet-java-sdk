@@ -1,6 +1,8 @@
 package org.massnet.api
 
+import com.google.gson.JsonSyntaxException
 import io.reactivex.rxjava3.core.*
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.*
@@ -47,13 +49,13 @@ interface MassNetApiV1 {
     @POST("addresses/create")
     fun createAddress(@Body req: CreateAddressRequest): Single<CreateAddressResponse>
 
-    @GET("address/{version}")
+    @GET("addresses/{version}")
     fun getAddresses(@Path("version") version: Int): Single<AddressDetails>
 
     @POST("addresses/balance")
     fun getAddressBalance(@Body req: GetWalletBalanceRequest): Single<AddressBalances>
 
-    @GET("address/{address}/validate")
+    @GET("addresses/{address}/validate")
     fun validateAddress(@Path("address") address: String): Single<ValidateAddressResponse>
 
     @POST("addresses/utxos")
@@ -133,20 +135,28 @@ object MassNetApiV1Impl {
             .readTimeout(readTimeout, TimeUnit.MILLISECONDS)
             .writeTimeout(writeTimeout, TimeUnit.MILLISECONDS)
             .callTimeout(callTimeout, TimeUnit.MILLISECONDS)
-            .addInterceptor { chain ->
-                val request = chain.request()
-                val response = chain.proceed(request)
-                val body = response.body!!
-                val json = body.string()
-                if (response.code != 200) {
-                    // try to parse as ApiError data type
-                    val error = ModelSerializer.GSON.fromJson(json, ApiError::class.java)
-                    throw ApiException(error)
-                } else {
-                    response.newBuilder().body(json.toResponseBody(body.contentType())).build()
-                }
-            }
+            .addInterceptor(interceptor)
             .build()
+    }
+
+    private val interceptor by lazy {
+        { chain: Interceptor.Chain ->
+            val request = chain.request()
+            val response = chain.proceed(request)
+            val body = response.body!!
+            val json = body.string()
+            if (response.code != 200) {
+                // try to parse as ApiError data type
+                val error = try {
+                    ModelSerializer.GSON.fromJson(json, ApiError::class.java)
+                } catch (e: JsonSyntaxException) {
+                    ApiError("Unparsable error from wallet", json, -1, listOf(e, response))
+                }
+                throw ApiException(error)
+            } else {
+                response.newBuilder().body(json.toResponseBody(body.contentType())).build()
+            }
+        }
     }
 
     @JvmOverloads
