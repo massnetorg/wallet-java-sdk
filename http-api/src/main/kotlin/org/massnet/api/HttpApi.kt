@@ -2,12 +2,12 @@ package org.massnet.api
 
 import io.reactivex.rxjava3.core.*
 import okhttp3.OkHttpClient
-import okhttp3.Interceptor
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.*
 import retrofit2.http.*
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 interface MassNetApiV1 {
 
@@ -121,39 +121,45 @@ class ApiException(
 object MassNetApiV1Impl {
 
     const val DEFAULT_ENDPOINT = "http://127.0.0.1:9688/v1/"
+    const val DEFAULT_CONN_TIMEOUT = 300L
+    const val DEFAULT_READ_TIMEOUT = 500L
+    const val DEFAULT_WRITE_TIMEOUT = 500L
+    const val DEFAULT_CALL_TIMEOUT = 5000L
 
-    private fun createOkHttpClient(): OkHttpClient {
+    private fun createOkHttpClient(connTimeout: Long, readTimeout: Long,
+                                   writeTimeout: Long, callTimeout: Long): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(walletApiResponseInterceptor)
+            .connectTimeout(connTimeout, TimeUnit.MILLISECONDS)
+            .readTimeout(readTimeout, TimeUnit.MILLISECONDS)
+            .writeTimeout(writeTimeout, TimeUnit.MILLISECONDS)
+            .callTimeout(callTimeout, TimeUnit.MILLISECONDS)
+            .addInterceptor { chain ->
+                val request = chain.request()
+                val response = chain.proceed(request)
+                val body = response.body!!
+                val json = body.string()
+                if (response.code != 200) {
+                    // try to parse as ApiError data type
+                    val error = ModelSerializer.GSON.fromJson(json, ApiError::class.java)
+                    throw ApiException(error)
+                } else {
+                    response.newBuilder().body(json.toResponseBody(body.contentType())).build()
+                }
+            }
             .build()
     }
 
-    private val walletApiResponseInterceptor by lazy {
-        { chain: Interceptor.Chain ->
-            val request = chain.request()
-            val response = chain.proceed(request)
-            val body = response.body!!
-            val json = body.string()
-
-            if (response.code != 200) {
-                // try to parse as ApiError data type
-                val error = ModelSerializer.GSON.fromJson(json, ApiError::class.java)
-                throw ApiException(error)
-            } else {
-                response.newBuilder().body(json.toResponseBody(body.contentType())).build()
-            }
-        }
-    }
-
-
     @JvmOverloads
     @JvmStatic
-    fun create(baseUrl: String = DEFAULT_ENDPOINT): MassNetApiV1 {
+    fun create(baseUrl: String = DEFAULT_ENDPOINT,
+               connTimeout: Long = DEFAULT_CONN_TIMEOUT, readTimeout: Long = DEFAULT_READ_TIMEOUT,
+               writeTimeout: Long = DEFAULT_WRITE_TIMEOUT, callTimeout: Long = DEFAULT_CALL_TIMEOUT
+    ): MassNetApiV1 {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(ModelSerializer.GSON))
-            .client(createOkHttpClient())
+            .client(createOkHttpClient(connTimeout, readTimeout, writeTimeout, callTimeout))
             .build().create(MassNetApiV1::class.java)
     }
 

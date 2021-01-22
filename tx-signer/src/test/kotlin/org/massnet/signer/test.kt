@@ -50,7 +50,7 @@ object ProtoTest {
             "649ce9ec4cf87af806ded9fb95a4eafe55c2e045ba7a16ca7d3ea20a63ac582e",
             "15a9d18c34531d4ac02116890ecd9fa623d4e6d2456769a28dd6206ea6bd9767"
         )
-        val amounts = listOf(8999997080, 799997080)
+        val amounts = listOf(8999997080L, 799997080L)
         val signed = Signer.signRawTransaction(unsignedTx, amounts, priv, HashType.SigHashAll)
         require(signed == signedTx)
     }

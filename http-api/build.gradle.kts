@@ -5,7 +5,7 @@ plugins {
 }
 
 dependencies {
-    val okhttpVersion = "4.8.1"
+    val okhttpVersion = "4.9.0"
     val retrofitVersion = "2.9.0"
 
     implementation("io.reactivex.rxjava3:rxjava:3.0.5")
@@ -20,7 +20,7 @@ publishing {
         create<MavenPublication>("httpApi") {
             groupId = Constants.artifactGroup
             artifactId = project.name
-            version = "0.2.2"
+            version = "0.3.0"
             from(components["java"])
 
             pom {

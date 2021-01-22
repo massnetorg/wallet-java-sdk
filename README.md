@@ -51,6 +51,8 @@ import org.massnet.api.*;
 
 // create API service (might be slow, about 0.5s)
 var api = MassNetApiV1Impl.getDefaultService();
+// or set custom endpoint & timeout (see OkHttp documentation for details)
+var api = MassNetApiV1Impl.create("http://127.0.0.1:9688/v1/", 500, 500, 500, 3000);
 
 // example: get client status, blocking
 var status = api.getClientStatus().blockingGet();
