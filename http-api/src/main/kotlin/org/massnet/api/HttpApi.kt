@@ -9,6 +9,7 @@ import retrofit2.*
 import retrofit2.http.*
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 interface MassNetApiV1 {
@@ -155,7 +156,7 @@ object MassNetApiV1Impl {
                 } catch (e: JsonSyntaxException) {
                     ApiError("Unparsable error from wallet", json, -1, listOf(e, response))
                 }
-                throw ApiException(error)
+                throw IOException(ApiException(error))
             } else {
                 response.newBuilder().body(json.toResponseBody(body.contentType())).build()
             }
