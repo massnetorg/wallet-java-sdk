@@ -447,7 +447,7 @@ data class Sk(
     val sk: String
 )
 
-data class Block (
+data class Block(
     var hash: String,
     var chainId: String,
     var version: String,
@@ -472,7 +472,7 @@ data class Block (
     var timeUtc: String,
     var txCount: Int,
 ) {
-    data class RawTx (
+    data class RawTx(
         var txid: String,
         var version: Int,
         var lockTime: String,
@@ -486,17 +486,17 @@ data class Block (
         var type: Int,
     )
 
-    data class ProposalArea (
+    data class ProposalArea(
         var punishmentArea: List<PunishmentArea>,
         var otherArea: List<OtherArea>,
     ) {
-        data class PunishmentArea (
+        data class PunishmentArea(
             var version: Int,
             var proposalType: Int,
             var publicKey: String,
             var testimony: List<Testimony>,
         ) {
-            data class Testimony (
+            data class Testimony(
                 var hash: String,
                 var chainId: String,
                 var version: String,
@@ -515,7 +515,7 @@ data class Block (
             )
         }
 
-        data class OtherArea (
+        data class OtherArea(
             var version: Int,
             var proposalType: Int,
             var data: String,
@@ -528,7 +528,7 @@ data class Block (
         var bitLength: Int
     )
 
-    data class BlockSignature (
+    data class BlockSignature(
         var r: String,
         var s: String
     )
