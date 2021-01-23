@@ -10,13 +10,22 @@ public class HttpApi {
         // create API service
         MassNetApiV1 api = MassNetApiV1Impl.getDefaultService();
 
-        // GET client status using blocking way
-        ClientStatus status = api.getClientStatus().blockingGet();
-        // print in readable format
-        System.out.println(status);
-        // convert back to JSON
-        String clientStatusJson = ModelSerializer.getGSON().toJson(status);
-        System.out.println(clientStatusJson);
+        // might throw RuntimeException
+        try {
+            // GET client status using blocking way
+            ClientStatus s = api.getClientStatus().blockingGet();
+            // print in readable format
+            System.out.println(s);
+            // convert back to JSON
+            String clientStatusJson = ModelSerializer.getGSON().toJson(s);
+            System.out.println(clientStatusJson);
+            // or get a block
+            Block b = api.getBlockByHeight(10000).blockingGet();
+            System.out.println(b);
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.toString());
+            e.printStackTrace();
+        }
 
         // show wallets
         System.out.println(api.wallets().blockingGet());

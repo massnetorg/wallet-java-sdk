@@ -446,3 +446,90 @@ data class GetSkRequest(
 data class Sk(
     val sk: String
 )
+
+data class Block (
+    var hash: String,
+    var chainId: String,
+    var version: String,
+    var height: String,
+    var confirmations: String,
+    var time: String,
+    var previousHash: String,
+    var nextHash: String,
+    var transactionRoot: String,
+    var witnessRoot: String,
+    var proposalRoot: String,
+    var target: String,
+    var quality: String,
+    var challenge: String,
+    var publicKey: String,
+    var proof: Proof,
+    var blockSignature: BlockSignature,
+    var banList: List<String>,
+    var proposalArea: ProposalArea,
+    var rawTx: List<RawTx>,
+    var size: Int,
+    var timeUtc: String,
+    var txCount: Int,
+) {
+    data class RawTx (
+        var txid: String,
+        var version: Int,
+        var lockTime: String,
+        var vin: List<RawTransaction.Vin>,
+        var vout: List<RawTransaction.Vout>,
+        var payload: String,
+        var confirmations: String,
+        var size: Int,
+        var fee: String,
+        var status: Int,
+        var type: Int,
+    )
+
+    data class ProposalArea (
+        var punishmentArea: List<PunishmentArea>,
+        var otherArea: List<OtherArea>,
+    ) {
+        data class PunishmentArea (
+            var version: Int,
+            var proposalType: Int,
+            var publicKey: String,
+            var testimony: List<Testimony>,
+        ) {
+            data class Testimony (
+                var hash: String,
+                var chainId: String,
+                var version: String,
+                var height: String,
+                var time: String,
+                var previousHash: String,
+                var transactionRoot: String,
+                var witnessRoot: String,
+                var proposalRoot: String,
+                var target: String,
+                var challenge: String,
+                var publicKey: String,
+                var proof: Proof,
+                var blockSignature: BlockSignature,
+                var banList: List<String>,
+            )
+        }
+
+        data class OtherArea (
+            var version: Int,
+            var proposalType: Int,
+            var data: String,
+        )
+    }
+
+    data class Proof(
+        var x: String,
+        var xPrime: String,
+        var bitLength: Int
+    )
+
+    data class BlockSignature (
+        var r: String,
+        var s: String
+    )
+}

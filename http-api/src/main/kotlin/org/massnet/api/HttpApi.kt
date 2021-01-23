@@ -16,6 +16,9 @@ interface MassNetApiV1 {
     @GET("blocks/best")
     fun getBestBlock(): Single<BestBlock>
 
+    @GET("blocks/height/{height}")
+    fun getBlockByHeight(@Path("height") height: Int): Single<Block>
+
     @GET("client/status")
     fun getClientStatus(): Single<ClientStatus>
 
