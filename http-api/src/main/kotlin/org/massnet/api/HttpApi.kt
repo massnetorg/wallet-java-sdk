@@ -84,7 +84,7 @@ interface MassNetApiV1 {
     fun sendRawTransaction(@Body req: HexData): Single<TransactionId>
 
     @GET("transactions/{tx_id}/details")
-    fun getRawTransaction(@Path("tx_id") transactionId: String): Single<TransactionId>
+    fun getRawTransaction(@Path("tx_id") transactionId: String): Single<RawTransaction>
 
     @GET("transactions/{tx_id}/status")
     fun getTransactionStatus(@Path("tx_id") transactionId: String): Single<TransactionStatus>

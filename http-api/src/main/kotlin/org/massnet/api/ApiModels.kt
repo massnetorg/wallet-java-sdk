@@ -244,6 +244,11 @@ data class CreateRawTransactionRequest(
     var inputs: List<Input>,
     var amounts: Map<String, String>,
     var lockTime: Int? = null,
+    /** only used in [MassNetApiV1.createRawTransaction] */
+    var changeAddress: String? = null,
+    /** only used in [MassNetApiV1.createRawTransaction] */
+    var subtractfeefrom: List<String>? = null,
+    /** only used in [MassNetApiV1.getTransactionFee] */
     var hasBinding: Boolean? = null
 ) {
     data class Input(
@@ -256,7 +261,8 @@ data class AutoCreateTransactionRequest(
     var amounts: Map<String, String>,
     var lockTime: Int? = null,
     var fee: String? = null,
-    var fromAddress: String? = null
+    var fromAddress: String? = null,
+    var changeAddress: String? = null
 )
 
 data class SignRawTransactionRequest(
