@@ -138,4 +138,5 @@ gradle-app.setting
 # End of https://www.toptal.com/developers/gitignore/api/gradle,kotlin,intellij+all
 
 local.properties
+gradle.properties
 
