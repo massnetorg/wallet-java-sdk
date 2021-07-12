@@ -26,6 +26,7 @@ message BlockHeader {
     Proof               proof            = 12;
     Signature           signature        = 14;
     repeated  PublicKey ban_list         = 15;
+    Hash                binding_root     = 16;
 }
 
 // Proto for Hashes
