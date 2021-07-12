@@ -5,10 +5,10 @@ plugins {
 }
 
 dependencies {
-    val okhttpVersion = "4.9.0"
+    val okhttpVersion = "4.9.1"
     val retrofitVersion = "2.9.0"
 
-    implementation("io.reactivex.rxjava3:rxjava:3.0.5")
+    implementation("io.reactivex.rxjava3:rxjava:3.0.13")
     implementation("com.squareup.okhttp3:okhttp:${okhttpVersion}")
     implementation("com.squareup.retrofit2:retrofit:${retrofitVersion}")
     implementation("com.squareup.retrofit2:adapter-rxjava3:${retrofitVersion}")
