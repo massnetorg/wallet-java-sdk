@@ -37,7 +37,7 @@ class Transaction(
 
         fun toBytes(includeWitness: Boolean): ByteArray {
             val noWitnessSize = hash.size + 4 + 8
-            val size = if (includeWitness) noWitnessSize + witness.sumBy { w -> w.size } else noWitnessSize
+            val size = if (includeWitness) noWitnessSize + witness.sumOf { w -> w.size } else noWitnessSize
             val buf = ByteBuffer.allocate(size).order(ByteOrder.LITTLE_ENDIAN)
             val hashBuf = ByteBuffer.wrap(hash).order(ByteOrder.BIG_ENDIAN).asLongBuffer().asReadOnlyBuffer()
             (0..3).forEach{ i -> buf.putLong(hashBuf[i]) }
