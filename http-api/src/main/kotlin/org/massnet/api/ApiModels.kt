@@ -191,6 +191,10 @@ data class AddressesRequest(
     var addresses: List<String>
 )
 
+data class TargetsRequest(
+    var targets: List<String>
+)
+
 data class AddressUtxos(
     val addressUtxos: List<AddressUtxo>
 ) {
@@ -221,7 +225,8 @@ data class DecodedTransaction(
     val size: Int,
     val vin: List<Vin>,
     val vout: List<Vout>,
-    val payload: String
+    val payloadHex: String,
+    val payloadDecode: String,
 ) {
     data class Vin(
         val txId: String,
@@ -236,7 +241,9 @@ data class DecodedTransaction(
         val type: Int,
         val scriptAsm: String,
         val scriptHex: String,
-        val addresses: List<String>
+        val recipientAddress: String,
+        val stakingAddress: String,
+        val bindingTarget: String,
     )
 }
 
@@ -316,7 +323,9 @@ data class RawTransaction(
             val vout: Int,
             val sequence: BigInteger,
             val witness: List<String>,
-            val addresses: List<String>
+            val fromAddress: String,
+            val stakingAddress: String,
+            val bindingTarget: String,
         )
     }
 
@@ -330,7 +339,9 @@ data class RawTransaction(
             val asm: String,
             val hex: String,
             val reqSigs: Int,
-            val addresses: List<String>
+            val recipientAddress: String,
+            val stakingAddress: String,
+            val bindingTarget: String,
         )
     }
 }
@@ -408,9 +419,15 @@ data class TransactionHistory(
     }
 }
 
-data class AddressBinding(
-    val amounts: Map<String, String>
-)
+data class TargetBindingResult(
+    val result: Map<String, TargetBinding>,
+) {
+    data class TargetBinding(
+        val targetType: String,
+        val targetSize: Int,
+        val amount: String,
+    )
+}
 
 data class BindingHistory(
     val histories: List<History>
@@ -426,7 +443,9 @@ data class BindingHistory(
             val txId: String,
             val vout: Int,
             val holderAddress: String,
-            val bindingAddress: String,
+            val bindingTarget: String,
+            val targetType: String,
+            val targetSize: Int,
             val amount: String
         )
     }
@@ -443,6 +462,11 @@ data class CreateBindingTransactionRequest(
         var amount: String
     )
 }
+
+data class AddressPayload(
+    var fromAddress: String,
+    var payload: String,
+)
 
 data class GetSkRequest(
     var address: String,
@@ -482,15 +506,44 @@ data class Block(
         var txid: String,
         var version: Int,
         var lockTime: String,
-        var vin: List<RawTransaction.Vin>,
-        var vout: List<RawTransaction.Vout>,
+        var vin: List<Vin>,
+        var vout: List<Vout>,
         var payload: String,
         var confirmations: String,
         var size: Int,
         var fee: String,
         var status: Int,
         var type: Int,
-    )
+    ) {
+        data class Vin(
+            val value: String,
+            val n: Int,
+            val type: Int,
+            val redeemDetail: RedeemDetail
+        ) {
+            data class RedeemDetail(
+                val txId: String,
+                val vout: Int,
+                val sequence: BigInteger,
+                val witness: List<String>,
+                val addresses: List<String>,
+            )
+        }
+
+        data class Vout(
+            val value: String,
+            val n: Int,
+            val type: Int,
+            val scriptDetail: ScriptDetail
+        ) {
+            data class ScriptDetail(
+                val asm: String,
+                val hex: String,
+                val reqSigs: Int,
+                val addresses: List<String>,
+            )
+        }
+    }
 
     data class ProposalArea(
         var punishmentArea: List<PunishmentArea>,
@@ -537,5 +590,25 @@ data class Block(
     data class BlockSignature(
         var r: String,
         var s: String
+    )
+}
+
+data class NetworkBinding(
+    val height: String,
+    val totalBinding: String,
+    val bindingPriceMassBitlength: Map<String, String>,
+    val bindingPriceChiaK: Map<String, String>,
+)
+
+data class PoolPks(
+    var poolPubkeys: List<String>,
+)
+
+data class PoolPkCoinbase(
+    val result: Map<String, Coinbase>,
+) {
+    data class Coinbase(
+        val nonce: Int,
+        val coinbase: String
     )
 }

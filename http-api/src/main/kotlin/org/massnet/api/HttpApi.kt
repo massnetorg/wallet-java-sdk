@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit
 interface MassNetApiV1 {
 
     @GET("blocks/best")
-    fun getBestBlock(): Single<BestBlock>
+    fun getBestBlock(): Single<Block>
 
     @GET("blocks/height/{height}")
     fun getBlockByHeight(@Path("height") height: Int): Single<Block>
@@ -104,9 +104,6 @@ interface MassNetApiV1 {
     @POST("transactions/history")
     fun transactionHistory(@Body req: TransactionHistoryRequest): Single<TransactionHistory>
 
-    @POST("addresses/binding")
-    fun getAddressBinding(@Body req: AddressesRequest): Single<AddressBinding>
-
     @GET("transactions/binding/history")
     fun getBindingHistory(): Single<BindingHistory> // excluding withdrawn
 
@@ -116,8 +113,24 @@ interface MassNetApiV1 {
     @POST("transactions/binding")
     fun createBindingTransaction(@Body req: CreateBindingTransactionRequest): Single<HexData>
 
+    @POST("transactions/poolpkcoinbase")
+    fun createPoolPkCoinbaseTransaction(@Body req: AddressPayload): Single<HexData>
+
     @POST("addresses/sk")
-    fun getSk(@Body req: GetSkRequest): Single<Sk> // dangerous, for SDK only
+    fun getSk_DO_NOT_USE_INTERNAL_USAGE_ONLY(@Body req: GetSkRequest): Single<Sk> // dangerous, for SDK only
+
+    @GET("bindings/networkbinding")
+    fun getNetworkBinding(): Single<NetworkBinding>
+
+    @GET("bindings/networkbinding/{height}")
+    fun getNetworkBindingByHeight(@Path("height") height: Int): Single<NetworkBinding>
+
+    @POST("bindings/targets")
+    fun checkTargetBinding(@Body req: TargetsRequest): Single<TargetBindingResult>
+
+    @POST("bindings/poolpubkeys")
+    fun checkPoolPkCoinbase(@Body req: PoolPks): Single<PoolPkCoinbase>
+
 }
 
 class ApiException(

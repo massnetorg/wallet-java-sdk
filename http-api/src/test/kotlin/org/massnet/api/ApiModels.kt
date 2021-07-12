@@ -294,34 +294,45 @@ object ApiModelsTest {
         Pair(
             """
             {
-                "tx_id": "e5b35b35510149ee98c4865285141cb0149ee98c4563825fdfedf1757d9853ee",
+                "tx_id": "a8758742862e69028f9fe7b30aa2a17b77d794102ce76733216828006b215cee",
                 "version": 1,
                 "lock_time": "0",
-                "size": 333,
+                "size": 272,
                 "vin": [
                     {
-                        "tx_id": "af03d3916639143e3436d0939286c33a70752bf6bc495512dbd093c18e033bc0",
-                        "vout": 1,
+                        "tx_id": "003520971b85f661e4f0a0840f93d0d224dc0593fd241f910972ebf4b5cbb090",
+                        "vout": 0,
                         "sequence": "18446744073709551615",
                         "witness": [
-                            "47304402200c32d95597e7f9df8463d42623a14f9721e737e360dd55c766b71b27fc0245d7e97a66ba1a09f0fe86a38e19ffad809065b23a141c91affb20ef45dd801",
-                            "51210356830b4780dc5f54a91eea99a508f93698e039fce8cf17dba913ba99afd790451ae"
+                            "4730440220213a3196a6043a8dd8565dfe04df3465b33fd8bc057f1d547ba579542f4450f602207b33e25bd4192a85d24eb2a7a843e13425789f0a4e16fadfeaaea05ab651a07501",
+                            "51210356830b4780dc5f5463aa91eeaa6508f93698e039fce8cf17db363ba99afd790451ae"
                         ]
                     }
                 ],
                 "vout": [
                     {
-                        "value": "99930000",
+                        "value": "20.02",
                         "n": 0,
+                        "type": 3,
+                        "script_asm": "0 76c83de3af1270125e4cf2db9b2b6c80d63d1043d9d0a57875193ad9d55783ef f5000304050607080102030405060708000203040020",
+                        "script_hex": "002076c83de3af1270125e4cf2db9b2b6c80d63d1043d9d0a57875193ad9d55783ef16f5000304050607080102030405060708000203040020",
+                        "recipient_address": "ms1qqwmyrmca0zfcpyhjv7tdek2mvsrtr6yzrm8g227r4ryadn42hs0hst2gvut",
+                        "staking_address": "",
+                        "binding_target": "18W8DkbtU6i8advRSkUaSocZqkE2JnDDZEbGH:MASS:32"
+                    },
+                    {
+                        "value": "171.9799",
+                        "n": 1,
                         "type": 1,
-                        "script_asm": "0 76c83de3af1270125e4cf2db5e4cf2db96c80d63d1043d9d0a57875193ad9d55783ef",
-                        "script_hex": "002076c83de3d0a70125e4cf2db9b2bdb966d0a3d9d0a57875193ad9d55783ef",
-                        "addresses": [
-                            "ms1qqwmyrmca0zfcpyhjvmcadek2mvsrtr6yzrm8g227r4ryadn42hs0htr6yz"
-                        ]
+                        "script_asm": "0 0c315878dffef12a9f2c9dfde6a68b43c0fd2ffe63f94e7cf3459411d3866907",
+                        "script_hex": "00200c315878dffef12a9f2c9dfde6a68b43c0fd2ffe63f94e7cf3459411d3866907",
+                        "recipient_address": "ms1qqpsc4s7xllmcj48evnh77df5tg0q06tl7v0u5ul8ngk2pr5uxdyrspx4x5g",
+                        "staking_address": "",
+                        "binding_target": ""
                     }
                 ],
-                "payload": ""
+                "payload_hex": "",
+                "payload_decode": ""
             }
         """.trimIndent(), DecodedTransaction::class.qualifiedName!!
         ),
@@ -386,70 +397,66 @@ object ApiModelsTest {
         Pair(
             """
             {
-                "hex": "080112a4010a280a240912dd62721ede54001140c92cfc8382df3819ee036bfb2b5038a021d2636f81821b767a10091248473044022003161aa740d89984ef995103735bc6f6a0e0db76bb4eb224914bb797cf9df9ab02202765b0dd7ecb4bf5835e1a1bdce6686b26b3f6e37977668aaefdfa9a29e0a5f4011225512103d0cd7443a5e8dcc030793bea363fe328c84d2daf75f0f2db17d36c07642777b151ae19ffffffffffffffff12a4010a280a2409c4352cf60f2ed5001100fd6132166eb6c719ff7553b515588c2721b12de84e4e2b55751009124847304402205f3a8d2ea86971a7cebba0a07aeb93372732bcefc4e566e8d29009a8cc5598720220759fd2b87292cc9633f16e151d6d34e28dfbfde6b35fa329177b985f80388c14011225512103d0cd7443a5e8dcc030793bea363fe328c84d2daf75f0f2db17d36c07642777b151ae19ffffffffffffffff1a2a088190dfc04a12220020c7bde8edb1e18eeb5fba5b5402b3064f7312999c1224fd4415fab6e26c2abbfa",
-                "tx_id": "b7f7cab1dcb748987aa5694a6c021828cbf18f07154991467417dbe4f98e9707",
+                "hex": "080112a2010a260a240961f6851b9720350011d2d0930f84a0f0e419911f24fd9305dc242190b0cbb5f4eb7209124847304402207977ec8fe14e83993a7712af3c7330ba35dfe4d17977a7c005d82dbacea48c9d0220646ad239ccf5967698a834e08a54f80d950ed31140c4773347e8dc58c425bcee01122551210356830b4780dc5f5463aa91eeaa6508f93698e039fce8cf17db363ba99afd790451ae19ffffffffffffffff1a3f08a0d5b5a0251237002076c83de3af1270125e4cf2db9b2b6c80d63d1043d9d0a57875193ad9d55783ef14f5000204050607080102030405060708000203041a2a08d0dceca222122200200c315878dffef12a9f2c9dfde6a68b43c0fd2ffe63f94e7cf3459411d3866907",
+                "tx_id": "c512cd335ac08e33c47bdf955e056475acbd96b13f96627d8069aaa8a6f3eab8",
                 "version": 1,
                 "lock_time": "0",
                 "block": {
-                    "height": "177083",
-                    "block_hash": "78bd7128f00f5186e18b5b2f692b9cb49fc0abcebb9e1bb86f06b818b0c6432a",
-                    "timestamp": "1574849967"
+                    "height": "3311",
+                    "block_hash": "5acdf5ca4bf6042d3fbb33aa489073c0558f1407083af39819c6eb0c81327efb",
+                    "timestamp": "1624690416"
                 },
                 "vin": [
                     {
-                        "value": "104.00000007",
+                        "value": "192",
                         "n": 0,
                         "type": 1,
                         "redeem_detail": {
-                            "tx_id": "0054de1e7262dd1238df8283fc2cc940a038502bfb6b03ee7a761b82816f63d2",
-                            "vout": 9,
+                            "tx_id": "003520971b85f661e4f0a0840f93d0d224dc0593fd241f910972ebf4b5cbb090",
+                            "vout": 0,
                             "sequence": "18446744073709551615",
                             "witness": [
-                                "473044022003161aa740d89984ef995103735bc6f6a0e0db76bb4eb224914bb797cf9df9ab02202765b0dd7ecb4bf5835e1a1bdce6686b26b3f6e37977668aaefdfa9a29e0a5f401",
-                                "512103d0cd7443a5e8dcc030793bea363fe328c84d2daf75f0f2db17d36c07642777b151ae"
+                                "47304402207977ec8fe14e83993a7712af3c7330ba35dfe4d17977a7c005d82dbacea48c9d0220646ad239ccf5967698a834e08a54f80d950ed31140c4773347e8dc58c425bcee01",
+                                "51210356830b4780dc5f5463aa91eeaa6508f93698e039fce8cf17db363ba99afd790451ae"
                             ],
-                            "addresses": [
-                                "ms1qqgzwwzt77zuw4sf8uqugqj5w6cpk6lalas4svx6jac20kjrhywx3qnshys8"
-                            ]
-                        }
-                    },
-                    {
-                        "value": "104.00000007",
-                        "n": 1,
-                        "type": 1,
-                        "redeem_detail": {
-                            "tx_id": "00d52e0ff62c35c4c7b66e163261fd00278c5815b55375ff75552b4e4ee82db1",
-                            "vout": 9,
-                            "sequence": "18446744073709551615",
-                            "witness": [
-                                "47304402205f3a8d2ea86971a7cebba0a07aeb93372732bcefc4e566e8d29009a8cc5598720220759fd2b87292cc9633f16e151d6d34e28dfbfde6b35fa329177b985f80388c1401",
-                                "512103d0cd7443a5e8dcc030793bea363fe328c84d2daf75f0f2db17d36c07642777b151ae"
-                            ],
-                            "addresses": [
-                                "ms1qqgzwwzt77zuw4sf8uqugqj5w6cpk6lalas4svx6jac20kjrhywx3qnshys8"
-                            ]
+                            "from_address": "ms1qqpsc4s7xllmcj48evnh77df5tg0q06tl7v0u5ul8ngk2pr5uxdyrspx4x5g",
+                            "staking_address": "",
+                            "binding_target": ""
                         }
                     }
                 ],
                 "vout": [
                     {
-                        "value": "200.00000001",
+                        "value": "100.001",
                         "n": 0,
+                        "type": 3,
+                        "script_detail": {
+                            "asm": "0 76c83de3af1270125e4cf2db9b2b6c80d63d1043d9d0a57875193ad9d55783ef f500020405060708010203040506070800020304",
+                            "hex": "002076c83de3af1270125e4cf2db9b2b6c80d63d1043d9d0a57875193ad9d55783ef14f500020405060708010203040506070800020304",
+                            "req_sigs": 1,
+                            "recipient_address": "ms1qqwmyrmca0zfcpyhjv7tdek2mvsrtr6yzrm8g227r4ryadn42hs0hst2gvut",
+                            "staking_address": "",
+                            "binding_target": "1PLSZYeBhp6UW1MXa2DpGjdvtyXBKjdaGt:MASS:0"
+                        }
+                    },
+                    {
+                        "value": "91.9989",
+                        "n": 1,
                         "type": 1,
                         "script_detail": {
-                            "asm": "0 c7bde8edb1e18eeb5fba5b5402b3064f7312999c1224fd4415fab6e26c2abbfa",
-                            "hex": "0020c7bde8edb1e18eeb5fba5b5402b3064f7312999c1224fd4415fab6e26c2abbfa",
+                            "asm": "0 0c315878dffef12a9f2c9dfde6a68b43c0fd2ffe63f94e7cf3459411d3866907",
+                            "hex": "00200c315878dffef12a9f2c9dfde6a68b43c0fd2ffe63f94e7cf3459411d3866907",
                             "req_sigs": 1,
-                            "addresses": [
-                                "ms1qqc7773md3ux8wkha6td2q9vcxfae39xvuzgj063q4l2mwymp2h0aqunux9z"
-                            ]
+                            "recipient_address": "ms1qqpsc4s7xllmcj48evnh77df5tg0q06tl7v0u5ul8ngk2pr5uxdyrspx4x5g",
+                            "staking_address": "",
+                            "binding_target": ""
                         }
                     }
                 ],
                 "payload": "",
-                "confirmations": "6",
-                "size": 360,
-                "fee": "8.00000013",
+                "confirmations": "381",
+                "size": 270,
+                "fee": "0.0001",
                 "status": 1,
                 "coinbase": false
             }
@@ -550,75 +557,50 @@ object ApiModelsTest {
         Pair(
             """
             {
-                "amounts": {
-                    "146hGPwfYRDde6tJ6trbyhkSoPwt69AqyZ": "0.026624",
-                    "1EgzSkV7vJ7xhC5g38ULLPoMBhHVW38VZN": "0.026624"
+                "result": {
+                    "146hGPwfYRDde6tJ6trbyhkSoPwt69AqyZ": {
+                        "target_type": "MASS",
+                        "target_size": 0,
+                        "amount": "0 MASS"
+                    },
+                    "14LQhx7dGPFyfRS7rYv4uKVdKjoyAJejcVVqw": {
+                        "target_type": "MASS",
+                        "target_size": 34,
+                        "amount": "4.5776367 MASS"
+                    },
+                    "18gsEwbYu65Qjwz4dUtKpYqfyYawQF8yga": {
+                        "target_type": "MASS",
+                        "target_size": 0,
+                        "amount": "100.002 MASS"
+                    },
+                    "1EgzSkV7vJ7xhC5g38ULLPoMBhHVW38VZN": {
+                        "target_type": "MASS",
+                        "target_size": 0,
+                        "amount": "0 MASS"
+                    }
                 }
             }
-        """.trimIndent(), AddressBinding::class.qualifiedName!!
+        """.trimIndent(), TargetBindingResult::class.qualifiedName!!
         ),
         Pair(
             """
             {
                 "histories": [
                     {
-                        "tx_id": "9e4c191a29a4eb018d7904ca1cd0d6f1568356426f0a4a1c5f388c91b768d80e",
+                        "tx_id": "fe7104abbc30b56ec62c092966eccdabaec7034bf87ae1eb653572ad648902e9",
                         "status": 1,
-                        "block_height": "117649",
+                        "block_height": "3322",
                         "utxo": {
-                            "tx_id": "9e4c191a29a4eb018d7904ca1cd0d6f1568356426f0a4a1c5f388c91b768d80e",
+                            "tx_id": "fe7104abbc30b56ec62c092966eccdabaec7034bf87ae1eb653572ad648902e9",
                             "vout": 0,
-                            "holder_address": "ms1qqehh47s0hvzrqqjl77ayj78yytstjkrsltcna343p8yg7ndskvveql4z3vl",
-                            "binding_address": "146hGPwfYRDde6tJ6trbyhkSoPwt69AqyZ",
-                            "amount": "0.026624"
+                            "holder_address": "ms1qqwmyrmca0zfcpyhjv7tdek2mvsrtr6yzrm8g227r4ryadn42hs0hst2gvut",
+                            "amount": "100.003",
+                            "binding_target": "1PLSZYeBhp6UW1MXaBtCqesJ5oQq4YEoyc",
+                            "target_type": "MASS",
+                            "target_size": 0
                         },
                         "from_addresses": [
-                            "ms1qq20yfsypqjuz305j2nhhu8khsj07mxfq2sa8ua685l2leayk02hrsk9kjvx"
-                        ]
-                    },
-                    {
-                        "tx_id": "9e4c191a29a4eb018d7904ca1cd0d6f1568356426f0a4a1c5f388c91b768d80e",
-                        "status": 1,
-                        "block_height": "117649",
-                        "utxo": {
-                            "tx_id": "9e4c191a29a4eb018d7904ca1cd0d6f1568356426f0a4a1c5f388c91b768d80e",
-                            "vout": 1,
-                            "holder_address": "ms1qqehh47s0hvzrqqjl77ayj78yytstjkrsltcna343p8yg7ndskvveql4z3vl",
-                            "binding_address": "1EgzSkV7vJ7xhC5g38ULLPoMBhHVW38VZN",
-                            "amount": "0.026624"
-                        },
-                        "from_addresses": [
-                            "ms1qq20yfsypqjuz305j2nhhu8khsj07mxfq2sa8ua685l2leayk02hrsk9kjvx"
-                        ]
-                    },
-                    {
-                        "tx_id": "436a2d092493590d96b4782067326c9f04fe5b4e3602203cea920c100dffb66b",
-                        "status": 1,
-                        "block_height": "117292",
-                        "utxo": {
-                            "tx_id": "436a2d092493590d96b4782067326c9f04fe5b4e3602203cea920c100dffb66b",
-                            "vout": 0,
-                            "holder_address": "ms1qq93pq8kphrtax7m5t52km4x84rrvplty4ttpjz27y3ve6rmhhuqys7cr2s4",
-                            "binding_address": "1HWyjsiqaMuHjdMJpSxDwQ9NG1Rrca4Jjx",
-                            "amount": "0.026624"
-                        },
-                        "from_addresses": [
-                            "ms1qq20yfsypqjuz305j2nhhu8khsj07mxfq2sa8ua685l2leayk02hrsk9kjvx"
-                        ]
-                    },
-                    {
-                        "tx_id": "436a2d092493590d96b4782067326c9f04fe5b4e3602203cea920c100dffb66b",
-                        "status": 1,
-                        "block_height": "117292",
-                        "utxo": {
-                            "tx_id": "436a2d092493590d96b4782067326c9f04fe5b4e3602203cea920c100dffb66b",
-                            "vout": 1,
-                            "holder_address": "ms1qq93pq8kphrtax7m5t52km4x84rrvplty4ttpjz27y3ve6rmhhuqys7cr2s4",
-                            "binding_address": "1MaTXJGHeXxPmDtusRtESWkcdu9RhTiu65",
-                            "amount": "0.026624"
-                        },
-                        "from_addresses": [
-                            "ms1qq20yfsypqjuz305j2nhhu8khsj07mxfq2sa8ua685l2leayk02hrsk9kjvx"
+                            "ms1qqpsc4s7xllmcj48evnh77df5tg0q06tl7v0u5ul8ngk2pr5uxdyrspx4x5g"
                         ]
                     }
                 ]
@@ -1094,7 +1076,68 @@ object ApiModelsTest {
                     "tx_count": 1
                 }
             """.trimIndent(), Block::class.qualifiedName!!
-        )
+        ),
+        Pair(
+            """
+            {
+                "height": "3691",
+                "total_binding": "0 MASS",
+                "binding_price_mass_bitlength": {
+                    "32": "0.91552734 MASS",
+                    "34": "4.5776367 MASS",
+                    "36": "18.3105468 MASS",
+                    "38": "73.2421872 MASS",
+                    "40": "292.9687488 MASS"
+                },
+                "binding_price_chia_k": {
+                    "32": "3.66210936 MASS",
+                    "33": "7.32421872 MASS",
+                    "34": "15.56396478 MASS",
+                    "35": "32.0434569 MASS",
+                    "36": "66.83349582 MASS",
+                    "37": "137.329101 MASS",
+                    "38": "281.98242072 MASS",
+                    "39": "578.61327888 MASS",
+                    "40": "1186.52343264 MASS"
+                }
+            }
+        """.trimIndent(), NetworkBinding::class.qualifiedName!!
+        ),
+        Pair(
+            """
+            {
+                "pool_pubkeys": ["8919b3715c0e8998c5d2f36f1236c7ab0d44b8285644effe2ee0d9f54a6dadf0efc6bbd0917371b2e9462186ac99c948", "7719b3715c0e8998c5d2f36f1236c7ab0d44b8285644effe2ee0d9f54a6dadf0efc6bbd0917371b2e9462186ac99c948","97d5be5d8612daf12a1658afe2ed2b8e708bb1d4128d0f31d71fa1272eff3ee66a4edec12aaae0e4f0a3d4421e2624c4"]
+            }
+        """.trimIndent(), PoolPks::class.qualifiedName!!
+        ),
+        Pair(
+            """
+            {
+                "result": {
+                    "8919b3715c0e8998c5d2f36f1236c7ab0d44b8285644effe2ee0d9f54a6dadf0efc6bbd0917371b2e9462186ac99c948": {
+                        "nonce": 6,
+                        "coinbase": "ms1qq2gyvfzkhdpnafyhedcm3syvla5ntzhdz2zw69nf65v5yw35zy2ysc7s6vt"
+                    },
+                    "7719b3715c0e8998c5d2f36f1236c7ab0d44b8285644effe2ee0d9f54a6dadf0efc6bbd0917371b2e9462186ac99c948": {
+                        "nonce": 0,
+                        "coinbase": ""
+                    },
+                    "97d5be5d8612daf12a1658afe2ed2b8e708bb1d4128d0f31d71fa1272eff3ee66a4edec12aaae0e4f0a3d4421e2624c4": {
+                        "nonce": 9,
+                        "coinbase": ""
+                    }
+                }
+            }
+        """.trimIndent(), PoolPkCoinbase::class.qualifiedName!!
+        ),
+        Pair(
+            """
+            {
+                "from_address":"ms1qqpsc4s7xllmcj48evnh77df5tg0q06tl7v0u5ul8ngk2pr5uxdyrspx4x5g",
+                "payload": "00018919b3715c0e8998c5d2f36f1236c7ab0d44b8285644effe2ee0d9f54a6dadf0efc6bbd0917371b2e9462186ac99c94886188f7aeadf4c58662869557a9dd3ccba6f04ccad4841d7cf1dfae08024f844356b9b41b183a27e1794a6a52fbc2cca08fa6d1ae6c63bff3e01637a4cc74a0f14e0e09a63d4d9728c8506ee376baf5d6af961344691272cf4da079b439470365208c48ad76867d492f96e3718119fed26b15da2509da2cd3aa3284746822289"
+            }
+        """.trimIndent(), AddressPayload::class.qualifiedName!!
+        ),
     )
 
     @Test
