@@ -1,12 +1,15 @@
 package org.massnet.signer
 
 import org.bitcoinj.core.ECKey
+import org.bitcoinj.crypto.HDKeyDerivation
 import org.bitcoinj.script.Script
 import org.junit.jupiter.api.Test
 import org.massnet.signer.ByteUtils.hexToBytes
 import org.massnet.signer.ByteUtils.toHexString
 import org.massnet.signer.ByteUtils.toProtoHash
 import java.security.SecureRandom
+import kotlin.concurrent.thread
+import kotlin.random.Random
 
 object ProtoTest {
 
@@ -18,12 +21,12 @@ object ProtoTest {
 
         val transaction = Proto.Tx.parseFrom(signedTx.hexToBytes())
         println(transaction)
-
         transaction.txOutList.forEach {
             val script = Script(it.pkScript.toByteArray())
             println("Out")
             println(script)
         }
+
 
         transaction.txInList.flatMap { t -> t.witnessList }.forEach { it ->
             val script = Script(it.toByteArray())
@@ -92,5 +95,19 @@ object ProtoTest {
     fun testCreateTransaction() {
         val hashStr = "807b26a916bcd6338a5b715f053d9f8bb6d8d188b7770df8a57447891f7341cd"
         assert(hashStr.toProtoHash().toBytes().toHexString() == hashStr)
+    }
+
+    @Test
+    fun testConvertAddressMultipleThread() {
+        (0..10000).map { thread {
+            val (addr, privKey) = Address.create(Random.nextBytes(64))
+            val key = Address.fromPubKey(ECKey.fromPrivate(privKey.hexToBytes()))
+            if (addr != key.encodeToString()) {
+                println(addr)
+                println(key.encodeToString())
+                println(privKey)
+            }
+            assert(addr == key.encodeToString())
+        } }.forEach { t -> t.join() }
     }
 }

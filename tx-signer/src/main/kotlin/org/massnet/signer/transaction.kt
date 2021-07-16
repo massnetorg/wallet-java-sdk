@@ -117,7 +117,7 @@ class Transaction(
                 this.witnessList.map { it.toByteArray() })
             if (input.witness.isNotEmpty()) {
                 require(input.witness.size == 2)
-                val scriptHash = Utils.sha256.digest(input.witness[1])
+                val scriptHash = Utils.sha256(input.witness[1])
                 input.address = Address.fromScriptHash(scriptHash).encodeToString()
             }
             return input

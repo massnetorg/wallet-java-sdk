@@ -69,8 +69,9 @@ fun Proto.Hash.toBytes(): ByteArray {
 }
 
 object Utils {
-    val sha256 by lazy {
-        MessageDigest.getInstance("SHA-256")
+
+    internal fun sha256(b: ByteArray): ByteArray {
+        return MessageDigest.getInstance("SHA-256").digest(b)
     }
 
     private class ByteArrayTypeAdapter : JsonSerializer<ByteArray>, JsonDeserializer<ByteArray> {

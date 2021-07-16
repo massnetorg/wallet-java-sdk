@@ -99,9 +99,10 @@ class Address(
         }
 
         @JvmStatic
+        @Synchronized
         fun fromPubKey(pubKey: ECKey, isStaking: Boolean = false): Address {
             val script = getRedeemScript(pubKey)
-            val scriptHash = Utils.sha256.digest(script.program)
+            val scriptHash = Utils.sha256(script.program)
             return fromScriptHash(scriptHash, isStaking)
         }
 
