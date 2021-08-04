@@ -93,16 +93,17 @@ object ProtoTest {
 
     @Test
     fun testBindingTargetParsing() {
-        var targets = listOf(
+        val targets = listOf(
             Triple("12t9QH4sqv76maPaVsMxiUREAuvtLprsa44Y4", 1, 32),
             Triple("165SQQnzVLUzTMVybsAfh3yZhm9TsN9yKrT7o", 1, 32),
             Triple("16271cUoC9un3eJv124MF7HQeuXHBoCZTBUd5", 1, 32)
         )
         for ((addr, type, size) in targets) {
-            val target = BindingTarget.fromString(addr)
+            val target = CommonAddress.fromString(addr) as BindingTarget
             assert(target.encodedString == addr) { "${target.encodedString} != $addr" }
             assert(target.size == size)
             assert(target.type == type)
+            assert(target.scriptHash.size == 22)
         }
     }
 

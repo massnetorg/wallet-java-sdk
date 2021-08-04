@@ -57,6 +57,7 @@ class Transaction(
 
         var address: String
         var isStaking: Boolean
+        var isBinding = false
         var bindingTarget: String? = null
         var bindingType: Int? = null
         var bindingSize: Int? = null
@@ -68,6 +69,7 @@ class Transaction(
                 isStaking = it.isStaking
             }
             target?.let {
+                isBinding = true
                 bindingTarget = it.encodedString
                 bindingType = it.type
                 bindingSize = it.size

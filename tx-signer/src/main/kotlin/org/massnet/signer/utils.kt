@@ -1,7 +1,6 @@
 package org.massnet.signer
 
 import com.google.gson.*
-import org.bitcoinj.script.Script
 import org.bitcoinj.script.ScriptOpCodes
 import org.massnet.signer.ByteUtils.hexToBytes
 import org.massnet.signer.ByteUtils.toHexString
@@ -10,10 +9,12 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.security.MessageDigest
 
+
 object ByteUtils {
     private const val HEX_CHARS = "0123456789abcdef"
     private val HEX_CHARS_ARRAY = HEX_CHARS.toCharArray()
 
+    @JvmStatic
     fun String.hexToBytes(): ByteArray {
         if (length % 2 == 1) throw IllegalArgumentException("Hex string must have even length.")
 
@@ -31,6 +32,7 @@ object ByteUtils {
         return result
     }
 
+    @JvmStatic
     fun ByteArray.toHexString(): String {
         val result = StringBuffer()
         forEach {
@@ -39,6 +41,7 @@ object ByteUtils {
         return result.toString()
     }
 
+    @JvmStatic
     fun Byte.toHexString(): String {
         val octet = this.toInt()
         val firstIndex = (octet and 0xF0) ushr 4
@@ -46,6 +49,7 @@ object ByteUtils {
         return "${HEX_CHARS_ARRAY[firstIndex]}${HEX_CHARS_ARRAY[secondIndex]}"
     }
 
+    @JvmStatic
     fun String.toProtoHash(): Proto.Hash {
         require(this.length == 64)
         val builder = Proto.Hash.newBuilder()
@@ -56,6 +60,7 @@ object ByteUtils {
         return builder.build()
     }
 
+    @JvmStatic
     fun ByteArray.toProtoHash(): Proto.Hash {
         return this.toHexString().toProtoHash()
     }
@@ -69,6 +74,7 @@ fun Proto.Hash.toBytes(): ByteArray {
     arr.putLong(this.s3)
     return arr.array()
 }
+
 
 object Utils {
 
@@ -86,6 +92,7 @@ object Utils {
         }
     }
 
+    @JvmStatic
     val GSON by lazy {
         GsonBuilder()
             .setPrettyPrinting()
@@ -93,6 +100,7 @@ object Utils {
             .create()
     }
 }
+
 
 object ScriptUtils {
     @JvmStatic
@@ -122,6 +130,7 @@ object ScriptUtils {
         buf.put(ScriptOpCodes.OP_0.toByte())
         buf.put(32) // length
         buf.put(holder.scriptHash) // script hash
+        assert(targetScript.size == 22)
         buf.put(targetScript.size.toByte()) // length
         buf.put(targetScript) // script hash
         return buf.array()

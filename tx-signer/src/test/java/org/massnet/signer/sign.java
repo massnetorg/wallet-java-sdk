@@ -51,7 +51,7 @@ public class sign {
         // hash
         byte[] inputHash = new byte[32];
         Random random = new Random();
-        byte[] input = ByteUtils.INSTANCE.hexToBytes("807b26a916bcd6338a5b715f053d9f8bb6d8d188b7770df8a57447891f7341cd");
+        byte[] input = ByteUtils.hexToBytes("807b26a916bcd6338a5b715f053d9f8bb6d8d188b7770df8a57447891f7341cd");
         for (int i = 0; i < 32; ++i) {
             inputHash[i] = (byte) random.nextInt(256);
         }
@@ -64,8 +64,11 @@ public class sign {
 
         // outputs
         List<Transaction.Output> vout = new ArrayList<>();
-        vout.add(new Transaction.Output(1000, ScriptUtils.getP2WSHOutputScript(Address.fromString("ms1qq8k8g3kfn23faudluydaadjj3g3fqme2jzz7hdut4lp656r3humuqmkwmmy"))));
-        vout.add(new Transaction.Output(2000, ScriptUtils.getP2WSHOutputScript(Address.fromString("ms1qq8k8g3kfn23faudluydaadjj3g3fqme2jzz7hdut4lp656r3humuqmkwmmy"))));
+        Address addr = Address.fromString("ms1qq8k8g3kfn23faudluydaadjj3g3fqme2jzz7hdut4lp656r3humuqmkwmmy");
+        BindingTarget target = BindingTarget.fromString("165SQQnzVLUzTMVybsAfh3yZhm9TsN9yKrT7o");
+        vout.add(new Transaction.Output(1000, ScriptUtils.getP2WSHOutputScript(addr)));
+        // vout.add(new Transaction.Output(2000, ScriptUtils.getP2SWSHOutputScript(addr))); // not implemented
+        vout.add(new Transaction.Output(3000, ScriptUtils.getP2BWSHOutputScript(addr, target)));
 
         // generate transaction
         Transaction tx = new Transaction(1, 0, new byte[0], vin, vout);
@@ -81,7 +84,7 @@ public class sign {
         System.out.println(json);
 
         // convert from JSON
-        Transaction fromJson = Utils.INSTANCE.getGSON().fromJson("{}", Transaction.class); // NOTE: replace with your json
+        Transaction fromJson = Utils.getGSON().fromJson("{}", Transaction.class); // NOTE: replace with your json
         System.out.println(fromJson.toJson());
 
         // sign, either Proto.Tx, Transaction or hex string can be accepted
