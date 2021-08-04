@@ -154,7 +154,7 @@ class Address(
             // generate address with the sub key
             val key = ECKey.fromPrivate(privateKey.privKeyBytes, true)
             val addr = fromPubKey(key, isStaking)
-            return Pair(addr.encodeToString(), key.privateKeyAsHex)
+            return Pair(addr.encodedString, key.privateKeyAsHex)
         }
     }
 }
