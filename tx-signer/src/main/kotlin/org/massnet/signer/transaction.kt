@@ -56,10 +56,22 @@ class Transaction(
     ) {
 
         var address: String
+        var isStaking: Boolean
+        var bindingTarget: String? = null
+        var bindingType: Int? = null
+        var bindingSize: Int? = null
 
         init {
-            val scriptHash = pkScript.drop(2).toByteArray() // OP_0 OP_LEN ScriptHash
-            address = Address.fromScriptHash(scriptHash).encodeToString()
+            val (addr, target) = ScriptUtils.decodeOutputScript(pkScript)
+            addr.let {
+                address = it.encodedString
+                isStaking = it.isStaking
+            }
+            target?.let {
+                bindingTarget = it.encodedString
+                bindingType = it.type
+                bindingSize = it.size
+            }
         }
 
         fun toProtoTxOut(): Proto.TxOut {
@@ -118,7 +130,7 @@ class Transaction(
             if (input.witness.isNotEmpty()) {
                 require(input.witness.size == 2)
                 val scriptHash = Utils.sha256(input.witness[1])
-                input.address = Address.fromScriptHash(scriptHash).encodeToString()
+                input.address = Address.fromScriptHash(scriptHash).encodedString
             }
             return input
         }

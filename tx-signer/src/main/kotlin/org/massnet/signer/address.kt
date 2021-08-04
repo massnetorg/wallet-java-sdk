@@ -1,5 +1,6 @@
 package org.massnet.signer
 
+import org.bitcoinj.core.Base58
 import org.bitcoinj.core.Bech32
 import org.bitcoinj.core.ECKey
 import org.bitcoinj.crypto.HDKeyDerivation
@@ -9,34 +10,58 @@ import java.nio.ByteBuffer
 import java.util.*
 import kotlin.experimental.and
 
+/**
+ * The interface of common addresses
+ */
+abstract class CommonAddress {
+    abstract val scriptHash: ByteArray
+    abstract val encodedString: String
+    @Deprecated("This API is kept only for compatibility", ReplaceWith("encodedString"), DeprecationLevel.WARNING)
+    fun encodeToString(): String = encodedString
+
+    companion object {
+        fun fromString(addr: String): CommonAddress {
+            if (addr.startsWith("ms")) {
+                Address.validate(addr)?.let { return it }
+            }
+            try {
+                return BindingTarget.fromString(addr)
+            } catch (e: Exception) {
+                // do nothing
+            }
+            throw IllegalArgumentException("cannot decode address $addr with Bech32 or base58")
+        }
+    }
+}
+
+/**
+ * Represent a segwit P2WSH address, which encodes an 32-byte script hash with Bech32
+ */
 class Address(
     val version: Int,
     val extVersion: Int,
-    val scriptHash: ByteArray
-) {
+    override val scriptHash: ByteArray
+): CommonAddress() {
 
     init {
-        require(version == 0)
-        require(extVersion == 0 || extVersion == 1)
-        require(scriptHash.size == 32)
+        require(version == 0) { "currently only support version 0" }
+        require(extVersion == 0 || extVersion == 1) { "currently only support ext version 0 (normal) / 1 (staking)" }
+        require(scriptHash.size == 32) { "script hash must be SHA256 (32 bytes)" }
     }
 
-    fun encodeToString(): String {
-        val encodedScript = convertBits(scriptHash.asIterable(), 8, 5, true)
-        val buf = ByteArray(2 + encodedScript.size)
-        buf[0] = version.toByte()
-        buf[1] = extVersion.toByte()
-        System.arraycopy(encodedScript, 0, buf, 2, encodedScript.size)
-        return Bech32.encode("ms", buf)
-    }
+    override val encodedString: String
+        get() {
+            val encodedScript = convertBits(scriptHash.asIterable(), 8, 5, true)
+            val buf = ByteArray(2 + encodedScript.size)
+            buf[0] = version.toByte()
+            buf[1] = extVersion.toByte()
+            System.arraycopy(encodedScript, 0, buf, 2, encodedScript.size)
+            return Bech32.encode("ms", buf)
+        }
 
+    @Deprecated("This API is kept only for compatibility", ReplaceWith("ScriptUtils.getP2WSHOutputScript(this)"), DeprecationLevel.WARNING)
     fun getPkScript(): ByteArray {
-        // OP_0 <REDEEM_SCRIPT_HASH>
-        val buf = ByteBuffer.allocate(34)
-        buf.put(ScriptOpCodes.OP_0.toByte())
-        buf.put(32) // length
-        buf.put(scriptHash) // script hash
-        return Script(buf.array()).program
+        return ScriptUtils.getP2WSHOutputScript(this)
     }
 
     val isStaking = extVersion == 1
@@ -79,8 +104,6 @@ class Address(
 
         @JvmStatic
         fun fromScriptHash(hash: ByteArray, isStaking: Boolean = false): Address {
-            // only common address, no binding or staking
-            require(hash.size == 32)
             return Address(0, if (isStaking) 1 else 0, hash)
         }
 

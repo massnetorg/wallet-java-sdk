@@ -1,6 +1,8 @@
 package org.massnet.signer
 
 import com.google.gson.*
+import org.bitcoinj.script.Script
+import org.bitcoinj.script.ScriptOpCodes
 import org.massnet.signer.ByteUtils.hexToBytes
 import org.massnet.signer.ByteUtils.toHexString
 import java.lang.reflect.Type
@@ -89,5 +91,54 @@ object Utils {
             .setPrettyPrinting()
             .registerTypeHierarchyAdapter(ByteArray::class.java, ByteArrayTypeAdapter())
             .create()
+    }
+}
+
+object ScriptUtils {
+    @JvmStatic
+    fun getP2WSHOutputScript(address: Address): ByteArray {
+        // OP_0 <REDEEM_SCRIPT_HASH>
+        require(!address.isStaking)
+        val buf = ByteBuffer.allocate(34)
+        buf.put(ScriptOpCodes.OP_0.toByte())
+        buf.put(32) // length
+        buf.put(address.scriptHash) // script hash
+        return buf.array()
+    }
+
+    @JvmStatic
+    fun getP2SWSHOutputScript(address: Address): ByteArray {
+        // OP_0 <REDEEM_SCRIPT_HASH> <FROZEN_PERIOD>
+        require(address.isStaking)
+        TODO("not implemented")
+    }
+
+    @JvmStatic
+    fun getP2BWSHOutputScript(holder: Address, target: BindingTarget): ByteArray {
+        // OP_0 <REDEEM_SCRIPT_HASH> <BINDING_TARGET_HASH>
+        require(!holder.isStaking) { "holder cannot be a staking address" }
+        val targetScript = target.scriptHash
+        val buf = ByteBuffer.allocate(1 + 1 + 32 + 1 + targetScript.size)
+        buf.put(ScriptOpCodes.OP_0.toByte())
+        buf.put(32) // length
+        buf.put(holder.scriptHash) // script hash
+        buf.put(targetScript.size.toByte()) // length
+        buf.put(targetScript) // script hash
+        return buf.array()
+    }
+
+    @JvmStatic
+    fun decodeOutputScript(scriptHash: ByteArray, isStaking: Boolean = false): Pair<Address, BindingTarget?> {
+        return if (scriptHash.size == 34) {
+            val segwitScriptHash = scriptHash.copyOfRange(2, 34)
+            Pair(Address.fromScriptHash(segwitScriptHash, isStaking), null)
+        } else if (scriptHash.size == 57) {
+            val segwitScriptHash = scriptHash.copyOfRange(2, 34)
+            val bindingScriptHash = scriptHash.copyOfRange(35, 57)
+            require(!isStaking) { "cannot use staking address in binding output" }
+            Pair(Address.fromScriptHash(segwitScriptHash, false), BindingTarget.fromScriptHash(bindingScriptHash))
+        } else {
+            throw IllegalArgumentException("cannot decode script hash to address")
+        }
     }
 }

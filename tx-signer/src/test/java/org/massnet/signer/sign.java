@@ -64,8 +64,8 @@ public class sign {
 
         // outputs
         List<Transaction.Output> vout = new ArrayList<>();
-        vout.add(new Transaction.Output(1000, Address.fromString("ms1qq8k8g3kfn23faudluydaadjj3g3fqme2jzz7hdut4lp656r3humuqmkwmmy").getPkScript()));
-        vout.add(new Transaction.Output(2000, Address.fromString("ms1qq8k8g3kfn23faudluydaadjj3g3fqme2jzz7hdut4lp656r3humuqmkwmmy").getPkScript()));
+        vout.add(new Transaction.Output(1000, ScriptUtils.getP2WSHOutputScript(Address.fromString("ms1qq8k8g3kfn23faudluydaadjj3g3fqme2jzz7hdut4lp656r3humuqmkwmmy"))));
+        vout.add(new Transaction.Output(2000, ScriptUtils.getP2WSHOutputScript(Address.fromString("ms1qq8k8g3kfn23faudluydaadjj3g3fqme2jzz7hdut4lp656r3humuqmkwmmy"))));
 
         // generate transaction
         Transaction tx = new Transaction(1, 0, new byte[0], vin, vout);

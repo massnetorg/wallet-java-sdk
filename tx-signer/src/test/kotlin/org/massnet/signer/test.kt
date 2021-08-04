@@ -28,15 +28,15 @@ object ProtoTest {
         }
 
 
-        transaction.txInList.flatMap { t -> t.witnessList }.forEach { it ->
+        transaction.txInList.flatMap { t -> t.witnessList }.forEach {
             val script = Script(it.toByteArray())
             println("In")
             println(script)
         }
 
         val txParsed = Transaction.fromProtoTx(transaction)
+        println(Utils.GSON.toJson(txParsed))
         println(txParsed.toProtoTx())
-
         println(txParsed.getHash())
     }
 
@@ -78,7 +78,7 @@ object ProtoTest {
         )
         for ((pubKey, addr) in cases) {
             val key = ECKey.fromPublicOnly(pubKey.hexToBytes())
-            assert(Address.fromPubKey(key).encodeToString() == addr)
+            assert(Address.fromPubKey(key).encodedString == addr)
         }
     }
     
@@ -88,7 +88,22 @@ object ProtoTest {
         assert(Address.validate("ms1qq2fvx7rqsz7e5j7s8ght22wgv6fhrfu7n4julrgxnmf7ysln5us4s7w3yqj") != null)
         val (addr, key) = Address.create(SecureRandom.getSeed(32), false)
         assert(Address.validate(addr) != null)
-        assert(Address.fromPubKey(ECKey.fromPrivate(key.hexToBytes(), true), false).encodeToString() == addr)
+        assert(Address.fromPubKey(ECKey.fromPrivate(key.hexToBytes(), true), false).encodedString == addr)
+    }
+
+    @Test
+    fun testBindingTargetParsing() {
+        var targets = listOf(
+            Triple("12t9QH4sqv76maPaVsMxiUREAuvtLprsa44Y4", 1, 32),
+            Triple("165SQQnzVLUzTMVybsAfh3yZhm9TsN9yKrT7o", 1, 32),
+            Triple("16271cUoC9un3eJv124MF7HQeuXHBoCZTBUd5", 1, 32)
+        )
+        for ((addr, type, size) in targets) {
+            val target = BindingTarget.fromString(addr)
+            assert(target.encodedString == addr) { "${target.encodedString} != $addr" }
+            assert(target.size == size)
+            assert(target.type == type)
+        }
     }
 
     @Test
@@ -102,12 +117,12 @@ object ProtoTest {
         (0..10000).map { thread {
             val (addr, privKey) = Address.create(Random.nextBytes(64))
             val key = Address.fromPubKey(ECKey.fromPrivate(privKey.hexToBytes()))
-            if (addr != key.encodeToString()) {
+            if (addr != key.encodedString) {
                 println(addr)
-                println(key.encodeToString())
+                println(key.encodedString)
                 println(privKey)
             }
-            assert(addr == key.encodeToString())
+            assert(addr == key.encodedString)
         } }.forEach { t -> t.join() }
     }
 }
