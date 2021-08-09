@@ -173,7 +173,7 @@ class BindingTarget(
     init {
         require(version == 0) { "currently only support version 0" }
         require(hash.size == 20) { "hash must be ripemd160 (20 bytes)" }
-        require(type == 1 || type == 2) { "invalid type $type (0 for MASS, 1 for Chia)" }
+        require(type == 0 || type == 1) { "invalid type $type (0 for MASS, 1 for Chia)" }
         require(size in 20..200) { "invalid size $size (must be in [20, 200])" }
     }
 
